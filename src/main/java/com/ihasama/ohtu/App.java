@@ -3,15 +3,24 @@ package com.ihasama.ohtu;
 import com.ihasama.ohtu.domain.EntryType;
 import com.ihasama.ohtu.domain.FieldType;
 import com.ihasama.ohtu.domain.Reference;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Scanner;
+import com.ihasama.ohtu.io.IO;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.support.FileSystemXmlApplicationContext;
 import org.springframework.stereotype.Component;
 
+import java.util.ArrayList;
+import java.util.List;
+
 @Component
 public class App {
+    private IO io;
+
+    @Autowired
+    public App(IO io) {
+        this.io = io;
+    }
+
     public static void main( String[] args ) {
         ApplicationContext ctx = new FileSystemXmlApplicationContext("src/main/resources/spring-context.xml");
 
@@ -21,25 +30,23 @@ public class App {
 
     private void run() {
         List<Reference> references = new ArrayList();
-        Scanner sc = new Scanner(System.in);
-        
+
         while (true) {
+
             EntryType entryType;
             String id;
                     
             while (true) {
                 try {
-                    System.out.print("Reference type: ");
-                    entryType = EntryType.valueOf(sc.nextLine().toUpperCase());
+                    entryType = EntryType.valueOf(io.readLine("Reference type: ").toUpperCase());
                     break;
                 } catch (IllegalArgumentException ex) {
                     System.out.println("Illegal reference type.");
                 }
             }
-            
-            System.out.print("Reference id: ");
+
             do {
-                id = sc.nextLine();
+                id = io.readLine("Reference id: ");
             } while (id.isEmpty());
             
             Reference ref = new Reference(entryType, id);
@@ -52,9 +59,7 @@ public class App {
                 
                 while (true) {
                     try {
-                        System.out.print("Field type (empty to save): ");
-                        
-                        String str = sc.nextLine();
+                        String str = io.readLine("Field type (empty to save): ");
                         if (str.isEmpty())
                             break askfields; // jump out of outer loop
                         
@@ -64,10 +69,9 @@ public class App {
                         System.out.println("Illegal field type.");
                     }
                 }
-                
-                System.out.print("Value: ");
+
                 do {
-                    value = sc.nextLine();
+                    value = io.readLine("Value: ");
                 } while (value.isEmpty());
                 
                 ref.addField(fieldType, value);
@@ -76,8 +80,7 @@ public class App {
             
             references.add(ref);
             System.out.println("Reference added successfully.");
-            System.out.println("Add another (y/n)?");
-            String answer = sc.nextLine();
+            String answer = io.readLine("Add another (y/n)?");
             
             if (answer.equals("n"))
                 break;
