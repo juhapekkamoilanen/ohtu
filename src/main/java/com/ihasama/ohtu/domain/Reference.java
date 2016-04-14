@@ -51,4 +51,10 @@ public class Reference {
         sb.append("}");
         return sb.toString();
     }
+
+    public Map<FieldType, String> getFields() {
+        return fields;
+    }
+    
+    
 }

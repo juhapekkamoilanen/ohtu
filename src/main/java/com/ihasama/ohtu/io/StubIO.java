@@ -15,13 +15,17 @@ public class StubIO implements IO
         prints = new ArrayList<String>();
     }
 
-    public void print(String toPrint) {
-        prints.add(toPrint);
+    public void println() {
+        println("");
+    }
+
+    public void println(Object obj) {
+        prints.add(obj.toString());
     }
 
     public int readInt(String prompt)
     {
-        print(prompt);
+        println(prompt);
         return Integer.parseInt(lines[i++]);
     }
 
@@ -31,7 +35,7 @@ public class StubIO implements IO
 
     public String readLine(String prompt)
     {
-        print(prompt);
+        println(prompt);
         if (i < lines.length) {
             return lines[i++];
         }
