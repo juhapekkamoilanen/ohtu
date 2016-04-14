@@ -3,7 +3,7 @@ import com.ihasama.ohtu.data_access.*
 import com.ihasama.ohtu.domain.*
 import com.ihasama.ohtu.io.*
 
-description 'User add a new reference'
+description 'User can add a new reference'
 
 scenario "user can add a reference of a valid type with a valid field", {
     given 'command add new references selected', {
