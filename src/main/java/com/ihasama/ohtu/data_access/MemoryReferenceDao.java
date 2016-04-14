@@ -14,7 +14,7 @@ public class MemoryReferenceDao implements ReferenceDao
 
     public MemoryReferenceDao()
     {
-        references = new ArrayList<Reference>();
+        references = new ArrayList<>();
     }        
 
     @Override
@@ -47,6 +47,6 @@ public class MemoryReferenceDao implements ReferenceDao
     }
 
     public List<Reference> getReferencess() {
-        return references;
+        return new ArrayList<>(references);
     }
 }
