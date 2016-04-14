@@ -1,4 +1,4 @@
 # ohtu
 Ohjelmistotuotanto-kurssin miniprojektiryhmän repositorio.
 
-[Sprint backlog](https://docs.google.com/spreadsheets/d/1J-Qd-IRhVWeuyfr-zdePopBaF2wBCu2ZjW2_9wCT6Fk/edit?usp=sharing)
+[Sprint backlog](https://docs.google.com/spreadsheets/d/1WktIf_b_0nX5qcIBJk2txbbSskEGmRI-eBHJx5AuMAM/edit?usp=sharing)
