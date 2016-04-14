@@ -1,5 +1,6 @@
 package com.ihasama.ohtu;
 
+import com.ihasama.ohtu.data_access.ReferenceDao;
 import com.ihasama.ohtu.domain.EntryType;
 import com.ihasama.ohtu.domain.FieldType;
 import com.ihasama.ohtu.domain.Reference;
@@ -9,16 +10,17 @@ import org.springframework.context.ApplicationContext;
 import org.springframework.context.support.FileSystemXmlApplicationContext;
 import org.springframework.stereotype.Component;
 
-import java.util.ArrayList;
 import java.util.List;
 
 @Component
 public class App {
     private IO io;
+    private ReferenceDao dao;
 
     @Autowired
-    public App(IO io) {
+    public App(IO io, ReferenceDao dao) {
         this.io = io;
+        this.dao = dao;
     }
 
     public static void main( String[] args ) {
@@ -29,66 +31,91 @@ public class App {
     }
 
     private void run() {
-        List<Reference> references = new ArrayList();
+        while (true) {
+            int command = io.readInt("[1] List references [2] Add new reference [3] Quit");
+
+            switch (command) {
+                case 1:
+                    handleList();
+                    break;
+                case 2:
+                    handleAdd();
+                    break;
+                case 3:
+                    return;
+                default:
+            }
+        }
+    }
+
+    public void handleList() {
+        System.out.println();
+        List<Reference> references = dao.listAll();
+
+        if (references.isEmpty()) {
+            System.out.println("No references.");
+            System.out.println();
+            return;
+        }
+
+        for (Reference reference : references) {
+            System.out.println(reference);
+            System.out.println();
+        }
+    }
+
+    public void handleAdd() {
+        System.out.println();
+        EntryType entryType;
+        String id;
 
         while (true) {
+            try {
+                entryType = EntryType.valueOf(io.readLine("Reference type: ").toUpperCase());
+                break;
+            } catch (IllegalArgumentException ex) {
+                System.out.println("Illegal reference type.");
+            }
+        }
 
-            EntryType entryType;
-            String id;
-                    
+        do {
+            id = io.readLine("Reference id: ");
+        } while (id.isEmpty());
+
+        Reference ref = new Reference(entryType, id);
+
+        FieldType fieldType;
+        String value;
+
+        askfields: // label loop to jump out of it
+        while (true) {
+
             while (true) {
                 try {
-                    entryType = EntryType.valueOf(io.readLine("Reference type: ").toUpperCase());
+                    String str = io.readLine("Field type (empty to save): ");
+                    if (str.isEmpty())
+                        break askfields; // jump out of outer loop
+
+                    fieldType = FieldType.valueOf(str.toUpperCase());
                     break;
                 } catch (IllegalArgumentException ex) {
-                    System.out.println("Illegal reference type.");
+                    System.out.println("Illegal field type.");
                 }
             }
 
             do {
-                id = io.readLine("Reference id: ");
-            } while (id.isEmpty());
-            
-            Reference ref = new Reference(entryType, id);
-            
-            FieldType fieldType;
-            String value;
-            
-            askfields: // label loop to jump out of it
-            while (true) {
-                
-                while (true) {
-                    try {
-                        String str = io.readLine("Field type (empty to save): ");
-                        if (str.isEmpty())
-                            break askfields; // jump out of outer loop
-                        
-                        fieldType = FieldType.valueOf(str.toUpperCase());
-                        break;
-                    } catch (IllegalArgumentException ex) {
-                        System.out.println("Illegal field type.");
-                    }
-                }
+                value = io.readLine("Value: ");
+            } while (value.isEmpty());
 
-                do {
-                    value = io.readLine("Value: ");
-                } while (value.isEmpty());
-                
-                ref.addField(fieldType, value);
-                System.out.println("Field added.\n");
-            }
-            
-            references.add(ref);
-            System.out.println("Reference added successfully.");
-            String answer = io.readLine("Add another (y/n)?");
-            
-            if (answer.equals("n"))
-                break;
+            ref.addField(fieldType, value);
+            System.out.println("Field added.\n");
         }
-        
-        for (Reference ref : references) {
-            System.out.println(ref);
-            System.out.println();
-        }
+
+        dao.add(ref);
+        System.out.println();
+        System.out.println("Reference added successfully.");
+        System.out.println();
+        System.out.println(ref);
+        System.out.println();
     }
 }
