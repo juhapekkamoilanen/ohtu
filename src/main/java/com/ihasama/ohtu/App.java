@@ -53,7 +53,7 @@ public class App {
         List<Reference> references = dao.listAll();
 
         if (references.isEmpty()) {
-            System.out.println("No references.");
+            io.print("No references.");
             System.out.println();
             return;
         }
@@ -74,7 +74,7 @@ public class App {
                 entryType = EntryType.valueOf(io.readLine("Reference type: ").toUpperCase());
                 break;
             } catch (IllegalArgumentException ex) {
-                System.out.println("Illegal reference type.");
+                io.print("Illegal reference type.");
             }
         }
 
@@ -99,7 +99,7 @@ public class App {
                     fieldType = FieldType.valueOf(str.toUpperCase());
                     break;
                 } catch (IllegalArgumentException ex) {
-                    System.out.println("Illegal field type.");
+                    io.print("Illegal field type.");
                 }
             }
 
@@ -108,12 +108,12 @@ public class App {
             } while (value.isEmpty());
 
             ref.addField(fieldType, value);
-            System.out.println("Field added.\n");
+            io.print("Field added.\n");
         }
 
         dao.add(ref);
         System.out.println();
-        System.out.println("Reference added successfully.");
+        io.print("Reference added successfully.");
         System.out.println();
         System.out.println(ref);
         System.out.println();
