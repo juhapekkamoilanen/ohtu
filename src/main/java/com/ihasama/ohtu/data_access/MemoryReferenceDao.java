@@ -42,7 +42,7 @@ public class MemoryReferenceDao implements ReferenceDao
         references.add(reference);
     }
 
-    public void setReferences(List<Reference> reference) {
+    public void setReferences(List<Reference> references) {
         this.references = references;
     }
 
