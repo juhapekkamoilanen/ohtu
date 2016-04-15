@@ -1,7 +1,6 @@
 package com.ihasama.ohtu;
 
 import com.ihasama.ohtu.data_access.Dao;
-import com.ihasama.ohtu.data_access.MemoryReferenceDao;
 import com.ihasama.ohtu.domain.EntryType;
 import com.ihasama.ohtu.domain.FieldType;
 import com.ihasama.ohtu.domain.Reference;
@@ -12,7 +11,6 @@ import org.springframework.context.ApplicationContext;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
-import javax.swing.SwingUtilities;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 
 @Component
@@ -30,14 +28,14 @@ public class App {
         ApplicationContext ctx = new ClassPathXmlApplicationContext("com/ihasama/ohtu/spring-context.xml");
 
         App application = ctx.getBean(App.class);
-        application.run();
+        application.runGUI();
+    }
+    
+    public void runGUI() {
+        new MainWindow("BibTeX gen", dao).show();
     }
 
-    private void run() {
-        dao.add(new Reference(EntryType.ARTICLE, "asd"));
-        new MainWindow("BibTeX gen", dao).show();
-        
-        /*
+    public void runConsole() {        
         while (true) {
             int command = io.readInt("[1] List references [2] Add new reference [3] Quit");
 
@@ -53,7 +51,6 @@ public class App {
                 default:
             }
         }
-                */
     }
 
     public void handleList() {

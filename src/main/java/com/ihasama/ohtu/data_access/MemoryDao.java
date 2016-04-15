@@ -1,11 +1,8 @@
 package com.ihasama.ohtu.data_access;
 
-import org.springframework.stereotype.Component;
-
 import java.util.ArrayList;
 import java.util.List;
 
-@Component
 public class MemoryDao<T> implements Dao<T>
 {
 

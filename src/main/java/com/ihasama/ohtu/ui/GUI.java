@@ -7,4 +7,5 @@ public interface GUI {
     JFrame getFrame();
     void show();
     void hide();
+    void refresh();
 }

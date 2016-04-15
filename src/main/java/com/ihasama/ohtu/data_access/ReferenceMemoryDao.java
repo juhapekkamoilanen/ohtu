@@ -1,13 +1,11 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
+
 package com.ihasama.ohtu.data_access;
 
 import com.ihasama.ohtu.domain.Reference;
+import org.springframework.stereotype.Component;
 
-public class MemoryReferenceDao extends MemoryDao<Reference> {
+@Component
+public class ReferenceMemoryDao extends MemoryDao<Reference> {
     
     public Reference findById(String id)
     {

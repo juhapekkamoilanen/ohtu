@@ -3,11 +3,16 @@ package com.ihasama.ohtu.ui;
 
 import com.ihasama.ohtu.data_access.Dao;
 import com.ihasama.ohtu.domain.Reference;
+import com.ihasama.ohtu.util.FileUtils;
 import java.awt.event.ActionEvent;
 import javax.swing.AbstractAction;
 import javax.swing.JButton;
 import javax.swing.JFrame;
+import javax.swing.JMenu;
+import javax.swing.JMenuBar;
+import javax.swing.JMenuItem;
 import javax.swing.JPanel;
+import javax.swing.JSeparator;
 import javax.swing.SwingUtilities;
 import net.miginfocom.swing.MigLayout;
 
@@ -16,10 +21,12 @@ public class MainWindow implements Runnable, GUI {
     private JFrame frame;
     private final String title;
     private Dao<Reference> dao;
+    private ReferenceList list;
     
     public MainWindow(String title, Dao<Reference> dao) {
         this.title = title;
         this.dao = dao;
+        this.list = new ReferenceList(dao);
     }
     
     @Override
@@ -27,6 +34,7 @@ public class MainWindow implements Runnable, GUI {
         frame = new JFrame(title);
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         
+        addMenu();
         addContents((JPanel) frame.getContentPane());
         
         frame.pack();
@@ -34,11 +42,27 @@ public class MainWindow implements Runnable, GUI {
         frame.setVisible(true);
     }
     
+    private void addMenu() {
+        JMenuBar menuBar = new JMenuBar();
+        JMenu fileMenu = new JMenu("file");
+        JMenuItem saveAs = new JMenuItem("save as...");
+        saveAs.addActionListener(e -> {
+            FileUtils.saveDaoAs(this, dao);
+        });
+        
+        fileMenu.add(saveAs);
+        menuBar.add(fileMenu);
+        
+        frame.setJMenuBar(menuBar);
+    }
+    
     private void addContents(JPanel container) {
-        container.setLayout(new MigLayout("", "[grow]"));
+        container.setLayout(new MigLayout("wrap 1", "[grow]"));
         JButton addBtn = new JButton(new AddReferenceAction("New Reference", dao));
-        //ReferenceList list = new ReferenceList(dao);
-        container.add(addBtn, "grow");
+        list = new ReferenceList(dao);
+        container.add(addBtn, "grow, gap 10 10 10 10");
+        container.add(new JSeparator(), "grow");
+        container.add(list, "grow, gap 10 10 10 10");
     }
 
     @Override
@@ -56,6 +80,11 @@ public class MainWindow implements Runnable, GUI {
         this.frame.setVisible(false);
     }
     
+    @Override
+    public void refresh() {
+        this.frame.pack();
+    }
+    
     private class AddReferenceAction extends AbstractAction {
 
         Dao<Reference> dao;
@@ -67,7 +96,10 @@ public class MainWindow implements Runnable, GUI {
         
         @Override
         public void actionPerformed(ActionEvent e) {
-            Reference ref = new ReferenceDialog().showDialog();
+            Reference ref = new ReferenceDialog("New Reference").showDialog();
+            dao.add(ref);
+            MainWindow.this.list.refresh();
+            MainWindow.this.frame.pack();
         }
         
     }

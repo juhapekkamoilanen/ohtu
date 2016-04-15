@@ -17,7 +17,7 @@ import junit.framework.TestCase;
  */
 public class MemoryReferenceDaoTest extends TestCase {
     
-    MemoryReferenceDao dao;
+    ReferenceMemoryDao dao;
     Reference rf1;
     Reference rf2;
     
@@ -28,7 +28,7 @@ public class MemoryReferenceDaoTest extends TestCase {
     @Override
     protected void setUp() throws Exception {
         super.setUp();
-        dao = new MemoryReferenceDao();
+        dao = new ReferenceMemoryDao();
         rf1 = new Reference(EntryType.ARTICLE, "0");
         rf2 = new Reference(EntryType.BOOK, "1");
     }
