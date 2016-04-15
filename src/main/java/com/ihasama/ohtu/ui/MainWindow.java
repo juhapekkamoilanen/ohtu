@@ -3,6 +3,9 @@ package com.ihasama.ohtu.ui;
 
 import com.ihasama.ohtu.data_access.Dao;
 import com.ihasama.ohtu.domain.Reference;
+import java.awt.event.ActionEvent;
+import javax.swing.AbstractAction;
+import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.SwingUtilities;
@@ -33,8 +36,9 @@ public class MainWindow implements Runnable, GUI {
     
     private void addContents(JPanel container) {
         container.setLayout(new MigLayout("", "[grow]"));
-        ReferenceList list = new ReferenceList(dao);
-        container.add(list, "grow");
+        JButton addBtn = new JButton(new AddReferenceAction("New Reference", dao));
+        //ReferenceList list = new ReferenceList(dao);
+        container.add(addBtn, "grow");
     }
 
     @Override
@@ -50,6 +54,22 @@ public class MainWindow implements Runnable, GUI {
     @Override
     public void hide() {
         this.frame.setVisible(false);
+    }
+    
+    private class AddReferenceAction extends AbstractAction {
+
+        Dao<Reference> dao;
+        
+        public AddReferenceAction(String text, Dao<Reference> dao) {
+            super(text);
+            this.dao = dao;
+        }
+        
+        @Override
+        public void actionPerformed(ActionEvent e) {
+            Reference ref = new ReferenceDialog().showDialog();
+        }
+        
     }
     
 }
