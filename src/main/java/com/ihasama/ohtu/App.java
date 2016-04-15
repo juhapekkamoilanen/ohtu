@@ -24,10 +24,18 @@ public class App {
     }
 
     public static void main( String[] args ) {
-        ApplicationContext ctx = new FileSystemXmlApplicationContext("src/main/resources/spring-context.xml");
+        ApplicationContext ctx;
+        try {
+            ctx = new FileSystemXmlApplicationContext("src/main/resources/spring-context.xml");
 
-        App application = ctx.getBean(App.class);
-        application.run();
+            App application = ctx.getBean(App.class);
+            application.run();  
+        } catch (Exception ex) {
+            ctx = new FileSystemXmlApplicationContext("spring-context.xml");
+
+            App application = ctx.getBean(App.class);
+            application.run();
+        }
     }
 
     private void run() {
