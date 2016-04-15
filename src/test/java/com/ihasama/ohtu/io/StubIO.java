@@ -1,5 +1,6 @@
 package com.ihasama.ohtu.io;
 
+import com.ihasama.ohtu.io.IO;
 import java.util.ArrayList;
 
 public class StubIO implements IO
