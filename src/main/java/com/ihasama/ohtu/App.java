@@ -11,6 +11,7 @@ import org.springframework.context.support.FileSystemXmlApplicationContext;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
+import org.springframework.context.support.ClassPathXmlApplicationContext;
 
 @Component
 public class App {
@@ -24,18 +25,10 @@ public class App {
     }
 
     public static void main( String[] args ) {
-        ApplicationContext ctx;
-        try {
-            ctx = new FileSystemXmlApplicationContext("src/main/resources/spring-context.xml");
+        ApplicationContext ctx = new ClassPathXmlApplicationContext("com/ihasama/ohtu/spring-context.xml");
 
-            App application = ctx.getBean(App.class);
-            application.run();  
-        } catch (Exception ex) {
-            ctx = new FileSystemXmlApplicationContext("spring-context.xml");
-
-            App application = ctx.getBean(App.class);
-            application.run();
-        }
+        App application = ctx.getBean(App.class);
+        application.run();
     }
 
     private void run() {
