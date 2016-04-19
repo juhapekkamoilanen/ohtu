@@ -6,6 +6,8 @@
 
 package com.ihasama.ohtu.domain;
 
+import com.ihasama.ohtu.util.StringUtils;
+
 import java.util.HashMap;
 import java.util.Map;
 
@@ -14,10 +16,14 @@ public class Reference {
     private String id;
     private Map<FieldType, String> fields;
 
+    public Reference() {
+        this.fields = new HashMap<>();
+    }
+
     public Reference(EntryType type, String id) {
+        this.fields = new HashMap<>();
         this.entryType = type;
         this.id = id;
-        this.fields = new HashMap<>();
     }
     
     public EntryType getType() {
@@ -40,36 +46,16 @@ public class Reference {
     public String toString() {
         StringBuilder sb = new StringBuilder();
         sb.append("@").append(entryType.toString().toLowerCase());
-        sb.append("{").append(id).append(",\n");
+        sb.append("{").append(StringUtils.toBibFormat(id)).append(",\n");
 
         for (Map.Entry<FieldType, String> e : fields.entrySet()) {
             String type = e.getKey().toString().toLowerCase();
-            String value = convertAccentedChars(e.getValue());
+            String value = StringUtils.toBibFormat(e.getValue());
             sb.append(type).append(" = {").append(value).append("},\n");
         }
 
         sb.append("}");
         return sb.toString();
-    }
-
-    private String convertAccentedChars(String string) {
-        StringBuilder newString = new StringBuilder();
-
-        for (int i = 0; i< string.length(); i++) {
-            char c = string.charAt(i);
-
-            switch (c) {
-                case 'ä': newString.append("{\\\"a}"); break;
-                case 'ö': newString.append("{\\\"o}"); break;
-                case 'Ä': newString.append("{\\\"A}"); break;
-                case 'Ö': newString.append("{\\\"O}"); break;
-                case 'Å': newString.append("{\\\"AA}"); break;
-                case 'å': newString.append("{\\\"aa}"); break;
-                default: newString.append(c);
-            }
-        }
-
-        return newString.toString();
     }
 
     public Map<FieldType, String> getFields() {

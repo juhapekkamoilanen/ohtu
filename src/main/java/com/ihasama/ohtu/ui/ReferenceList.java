@@ -31,7 +31,7 @@ public class ReferenceList extends JPanel {
             add(new JButton(new EditReferenceAction("edit", dao, ref)), "wrap");
         }
     }
-    
+
     private class EditReferenceAction extends AbstractAction {
         
         private Reference ref;

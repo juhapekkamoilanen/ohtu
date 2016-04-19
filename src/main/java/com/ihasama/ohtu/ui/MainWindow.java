@@ -38,12 +38,21 @@ public class MainWindow implements Runnable, GUI {
     private void addMenu() {
         JMenuBar menuBar = new JMenuBar();
         JMenu fileMenu = new JMenu("file");
+
+        JMenuItem loadFrom = new JMenuItem("load from...");
+        loadFrom.addActionListener(e -> {
+            FileUtils.loadDaoFrom(this, dao);
+            list.refresh();
+            refresh();
+        });
+
         JMenuItem saveAs = new JMenuItem("save as...");
         saveAs.addActionListener(e -> {
             FileUtils.saveDaoAs(this, dao);
         });
         
         fileMenu.add(saveAs);
+        fileMenu.add(loadFrom);
         menuBar.add(fileMenu);
         
         frame.setJMenuBar(menuBar);

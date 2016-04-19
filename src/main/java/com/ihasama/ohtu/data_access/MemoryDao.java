@@ -5,7 +5,6 @@ import java.util.List;
 
 public class MemoryDao<T> implements Dao<T>
 {
-
     protected List<T> objects;
 
     public MemoryDao()
@@ -24,9 +23,13 @@ public class MemoryDao<T> implements Dao<T>
         objects.add(obj);
     }
 
+    @Override
+    public void removeAll() { objects.removeAll(objects); }
+
+    @Override
+    public void remove(T obj) { objects.remove(obj); }
+
     public void setReferences(List<T> objects) {
         this.objects = objects;
     }
-    
-    
 }
