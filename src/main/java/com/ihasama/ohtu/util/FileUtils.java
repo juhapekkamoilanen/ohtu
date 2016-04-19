@@ -16,6 +16,7 @@ import java.io.PrintWriter;
 import java.util.Scanner;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import java.util.regex.Pattern;
 
 public final class FileUtils {
     
@@ -69,9 +70,7 @@ public final class FileUtils {
         while (true) {
             Reference reference = getReference(scanner);
 
-            if (reference == null) {
-                return;
-            }
+            if (reference == null) { return; }
 
             dao.add(reference);
         }
@@ -84,11 +83,11 @@ public final class FileUtils {
         while (scanner.hasNextLine()) {
             line = scanner.nextLine().trim();
 
-            if (line.length() > 0 && line.charAt(0) == '@') {
+            if (Pattern.matches("^@+.*\\{.*,$", line)) {
                 getTypeAndId(line, reference);
-            } else if (line.contains("=") && line.contains("},")) {
+            } else if (Pattern.matches("^.*\\s*=\\s*(\\{|\").*(\\}|\"),?$", line)) {
                 getField(line, reference);
-            } else if (line.length() > 0 && line.charAt(0) == '}') {
+            } else if (Pattern.matches("^\\}$", line)) {
                 return reference;
             }
         }
@@ -126,13 +125,11 @@ public final class FileUtils {
             key.append(line.charAt(i));
         }
 
-        while (line.charAt(i) != '{') {
+        while (line.charAt(i) != '{' && line.charAt(i) != '\"') {
             i++;
         }
 
-        i++;
-
-        for (; line.substring(i+1).contains("},"); i++) {
+        for (i += 1; !Pattern.matches("^(\\}|\"),?$", line.substring(i)); i++) {
             value.append(line.charAt(i));
         }
 

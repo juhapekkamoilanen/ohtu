@@ -24,7 +24,7 @@ public class MemoryDao<T> implements Dao<T>
     }
 
     @Override
-    public void removeAll() { objects.removeAll(objects); }
+    public void removeAll() { objects.clear(); }
 
     @Override
     public void remove(T obj) { objects.remove(obj); }
