@@ -3,12 +3,10 @@ package com.ihasama.ohtu.ui;
 
 import com.ihasama.ohtu.data_access.Dao;
 import com.ihasama.ohtu.domain.Reference;
-import java.awt.event.ActionEvent;
-import javax.swing.AbstractAction;
-import javax.swing.JButton;
-import javax.swing.JLabel;
-import javax.swing.JPanel;
 import net.miginfocom.swing.MigLayout;
+
+import javax.swing.*;
+import java.awt.event.ActionEvent;
 
 public class ReferenceList extends JPanel {
     
@@ -30,25 +28,24 @@ public class ReferenceList extends JPanel {
         for (Reference ref : dao.getObjects()) {
             JLabel label = new JLabel(ref.getId());
             add(label);
-            add(new JButton(new EditReferenceAction("edit", ref)), "wrap");
+            add(new JButton(new EditReferenceAction("edit", dao, ref)), "wrap");
         }
     }
     
     private class EditReferenceAction extends AbstractAction {
         
         private Reference ref;
+        private Dao<Reference> dao;
         
-        public EditReferenceAction(String text, Reference ref) {
+        public EditReferenceAction(String text, Dao<Reference> dao, Reference ref) {
             super(text);
+            this.dao = dao;
             this.ref = ref;
         }
         
         @Override
         public void actionPerformed(ActionEvent e) {
-            Reference newRef = new ReferenceDialog("Edit Reference", ref).showDialog();
-            ref.setType(newRef.getType());
-            ref.setId(newRef.getId());
-            ref.setFields(newRef.getFields());
+            new ReferenceDialog("Edit Reference", dao, ref).showDialog();
             refresh();
         }
         

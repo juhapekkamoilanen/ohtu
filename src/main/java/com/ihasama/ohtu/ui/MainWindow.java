@@ -4,17 +4,10 @@ package com.ihasama.ohtu.ui;
 import com.ihasama.ohtu.data_access.Dao;
 import com.ihasama.ohtu.domain.Reference;
 import com.ihasama.ohtu.util.FileUtils;
-import java.awt.event.ActionEvent;
-import javax.swing.AbstractAction;
-import javax.swing.JButton;
-import javax.swing.JFrame;
-import javax.swing.JMenu;
-import javax.swing.JMenuBar;
-import javax.swing.JMenuItem;
-import javax.swing.JPanel;
-import javax.swing.JSeparator;
-import javax.swing.SwingUtilities;
 import net.miginfocom.swing.MigLayout;
+
+import javax.swing.*;
+import java.awt.event.ActionEvent;
 
 public class MainWindow implements Runnable, GUI {
 
@@ -96,12 +89,11 @@ public class MainWindow implements Runnable, GUI {
         
         @Override
         public void actionPerformed(ActionEvent e) {
-            Reference ref = new ReferenceDialog("New Reference").showDialog();
-            dao.add(ref);
-            MainWindow.this.list.refresh();
-            MainWindow.this.frame.pack();
+            new ReferenceDialog("New Reference", dao).showDialog();
+            list.refresh();
+            refresh();
         }
         
     }
-    
+
 }

@@ -6,19 +6,13 @@ import com.ihasama.ohtu.domain.EntryType;
 import com.ihasama.ohtu.domain.FieldType;
 import com.ihasama.ohtu.domain.Reference;
 import com.ihasama.ohtu.util.Pair;
+import net.miginfocom.swing.MigLayout;
+
+import javax.swing.*;
 import java.awt.event.ActionEvent;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
-import javax.swing.AbstractAction;
-import javax.swing.JButton;
-import javax.swing.JComboBox;
-import javax.swing.JDialog;
-import javax.swing.JLabel;
-import javax.swing.JPanel;
-import javax.swing.JSeparator;
-import javax.swing.JTextField;
-import net.miginfocom.swing.MigLayout;
 
 public class ReferenceDialog extends JDialog {
     
@@ -26,9 +20,14 @@ public class ReferenceDialog extends JDialog {
     private JTextField refIdField;
     private List<Pair<JComboBox, JTextField>> fields;
     private JPanel fieldPanel;
+    private Dao<Reference> dao;
+
+    private Reference oldRef;
     
-    public ReferenceDialog(String title) {
+    public ReferenceDialog(String title, Dao<Reference> dao) {
         this.setTitle(title);
+        this.dao = dao;
+        this.oldRef = null;
         this.setModalityType(ModalityType.APPLICATION_MODAL);
         this.setLayout(new MigLayout("wrap 1", "[grow]"));
         
@@ -39,14 +38,15 @@ public class ReferenceDialog extends JDialog {
         fieldPanel = new JPanel(new MigLayout("insets 10, wrap 1", "[grow, fill]"));
     }
     
-    public ReferenceDialog(String title, Reference ref) {
-        this(title);
+    public ReferenceDialog(String title, Dao<Reference> dao, Reference ref) {
+        this(title, dao);
         init(ref);
     }
     
     private void init(Reference ref) {
         refTypeCombo.setSelectedItem(new TypeItem(ref.getType()));
         refIdField.setText(ref.getId());
+        oldRef = ref;
         
         for (Map.Entry<FieldType, String> e : ref.getFields().entrySet()) {
             addEmptyField();
@@ -56,31 +56,11 @@ public class ReferenceDialog extends JDialog {
         }
     }
     
-    public Reference showDialog() {
+    public void showDialog() {
         addContents();
         pack();
         setLocationByPlatform(true);
         setVisible(true);
-        
-        return generateReference();
-    }
-    
-    private Reference generateReference() {
-        TypeItem ti = (TypeItem) refTypeCombo.getSelectedItem();
-        Reference ref = new Reference(
-                (EntryType) ti.getItem(),
-                refIdField.getText()
-        );
-        
-        for (Pair<JComboBox, JTextField> pair : fields) {
-            ti = (TypeItem) pair.first.getSelectedItem();
-            ref.addField(
-                    (FieldType) ti.item, 
-                    pair.second.getText()
-            );
-        }
-        
-        return ref;
     }
     
     private void addContents() {
@@ -138,9 +118,36 @@ public class ReferenceDialog extends JDialog {
         
         @Override
         public void actionPerformed(ActionEvent e) {
+            Reference ref = this.generateReference();
+
+            if (oldRef != null) {
+                oldRef.setType(ref.getType());
+                oldRef.setId(ref.getId());
+                oldRef.setFields(ref.getFields());
+            } else {
+                dao.add(ref);
+            }
+
             ReferenceDialog.this.dispose();
         }
-        
+
+        private Reference generateReference() {
+            TypeItem ti = (TypeItem) refTypeCombo.getSelectedItem();
+            Reference ref = new Reference(
+                    (EntryType) ti.getItem(),
+                    refIdField.getText()
+            );
+
+            for (Pair<JComboBox, JTextField> pair : fields) {
+                ti = (TypeItem) pair.first.getSelectedItem();
+                ref.addField(
+                        (FieldType) ti.item,
+                        pair.second.getText()
+                );
+            }
+
+            return ref;
+        }
     }
     
     private static class TypeItem {
