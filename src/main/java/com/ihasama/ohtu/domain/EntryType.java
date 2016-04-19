@@ -6,6 +6,7 @@
 package com.ihasama.ohtu.domain;
 
 import java.util.Arrays;
+import java.util.List;
 
 public enum EntryType {    
     ARTICLE(
@@ -79,5 +80,11 @@ public enum EntryType {
     
     public FieldType[] getOptionalFieldTypes() {
         return Arrays.copyOf(optionalFields, optionalFields.length);
+    }
+    
+    public FieldType[] getValidFieldTypes() {
+        List<FieldType> all = Arrays.asList(requiredFields);
+        all.addAll(Arrays.asList(optionalFields));
+        return all.toArray(new FieldType[] {});
     }
 }

@@ -10,9 +10,9 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class Reference {
-    private final EntryType entryType;
-    private final String id;
-    private final Map<FieldType, String> fields;
+    private EntryType entryType;
+    private String id;
+    private Map<FieldType, String> fields;
     
     public Reference(EntryType type, String id) {
         this.entryType = type;
@@ -54,6 +54,18 @@ public class Reference {
 
     public Map<FieldType, String> getFields() {
         return fields;
+    }
+
+    public void setType(EntryType entryType) {
+        this.entryType = entryType;
+    }
+
+    public void setId(String id) {
+        this.id = id;
+    }
+
+    public void setFields(Map<FieldType, String> fields) {
+        this.fields = fields;
     }
     
     
