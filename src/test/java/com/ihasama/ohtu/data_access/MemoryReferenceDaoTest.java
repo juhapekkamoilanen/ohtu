@@ -17,7 +17,7 @@ import junit.framework.TestCase;
  */
 public class MemoryReferenceDaoTest extends TestCase {
     
-    MemoryReferenceDao dao;
+    ReferenceMemoryDao dao;
     Reference rf1;
     Reference rf2;
     
@@ -28,7 +28,7 @@ public class MemoryReferenceDaoTest extends TestCase {
     @Override
     protected void setUp() throws Exception {
         super.setUp();
-        dao = new MemoryReferenceDao();
+        dao = new ReferenceMemoryDao();
         rf1 = new Reference(EntryType.ARTICLE, "0");
         rf2 = new Reference(EntryType.BOOK, "1");
     }
@@ -41,25 +41,19 @@ public class MemoryReferenceDaoTest extends TestCase {
     
     public void testAdd() {
         dao.add(rf1);
-        assertEquals(dao.getReferencess().contains(rf1), true);
+        assertEquals(dao.getObjects().contains(rf1), true);
     }
     public void testSetRef() {
         List<Reference> uusi = new ArrayList<>();
         uusi.add(rf1);
         uusi.add(rf2);
         dao.setReferences(uusi);
-        assertEquals(dao.getReferencess(), uusi);
+        assertEquals(dao.getObjects(), uusi);
     }
     
-    public void testGetRefs() {
+    public void testGetObjects() {
         dao.add(rf1);
-        assertEquals(dao.getReferencess().get(0), rf1);
-    }
-    
-    public void testListAll() {
-        dao.add(rf1);
-        dao.add(rf2);
-        assertEquals(dao.listAll(), dao.getReferencess());
+        assertEquals(dao.getObjects().get(0), rf1);
     }
     
     public void testFindById() {

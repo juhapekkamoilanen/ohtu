@@ -1,7 +1,9 @@
 
 package com.ihasama.ohtu.io;
 
-public interface IO
+import java.io.Closeable;
+
+public interface IO extends Closeable
 {
     void println();
     void println(Object obj);

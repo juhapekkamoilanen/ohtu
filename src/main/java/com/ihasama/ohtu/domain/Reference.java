@@ -6,18 +6,24 @@
 
 package com.ihasama.ohtu.domain;
 
+import com.ihasama.ohtu.util.StringUtils;
+
 import java.util.HashMap;
 import java.util.Map;
 
 public class Reference {
-    private final EntryType entryType;
-    private final String id;
-    private final Map<FieldType, String> fields;
-    
+    private EntryType entryType;
+    private String id;
+    private Map<FieldType, String> fields;
+
+    public Reference() {
+        this.fields = new HashMap<>();
+    }
+
     public Reference(EntryType type, String id) {
+        this.fields = new HashMap<>();
         this.entryType = type;
         this.id = id;
-        this.fields = new HashMap<>();
     }
     
     public EntryType getType() {
@@ -40,14 +46,14 @@ public class Reference {
     public String toString() {
         StringBuilder sb = new StringBuilder();
         sb.append("@").append(entryType.toString().toLowerCase());
-        sb.append("{").append(id).append(",\n");
-        
+        sb.append("{").append(StringUtils.toBibFormat(id)).append(",\n");
+
         for (Map.Entry<FieldType, String> e : fields.entrySet()) {
             String type = e.getKey().toString().toLowerCase();
-            String value = e.getValue();
+            String value = StringUtils.toBibFormat(e.getValue());
             sb.append(type).append(" = {").append(value).append("},\n");
         }
-        
+
         sb.append("}");
         return sb.toString();
     }
@@ -55,6 +61,17 @@ public class Reference {
     public Map<FieldType, String> getFields() {
         return fields;
     }
-    
-    
+
+
+    public void setType(EntryType entryType) {
+        this.entryType = entryType;
+    }
+
+    public void setId(String id) {
+        this.id = id;
+    }
+
+    public void setFields(Map<FieldType, String> fields) {
+        this.fields = fields;
+    }
 }

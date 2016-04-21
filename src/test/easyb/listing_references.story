@@ -7,13 +7,13 @@ description 'User can see a list of existing references'
 
 scenario "User can ask for references when none have been added", {
     given 'command add list references is selected', {
-        memoryRefDao = new MemoryReferenceDao()
+        memoryRefDao = new ReferenceMemoryDao()
         io = new StubIO("1", "3")
         app = new App(io, memoryRefDao)
     }
     
     when 'no references exist', {
-        app.run()
+        app.runConsole()
     }
 
     then 'user is notified about the empty reference list', {
@@ -23,7 +23,7 @@ scenario "User can ask for references when none have been added", {
 
 scenario "User can get a list of existing references", {
     given 'command add list references is selected', {
-        memoryRefDao = new MemoryReferenceDao()
+        memoryRefDao = new ReferenceMemoryDao()
         memoryRefDao.add(new Reference(EntryType.ARTICLE, "id"))
         io = new StubIO("1", "3")
         app = new App(io, memoryRefDao)
@@ -31,7 +31,7 @@ scenario "User can get a list of existing references", {
     }
 
     when 'references exist', {
-        app.run()
+        app.runConsole()
     }
 
     then 'existing references printed', {
