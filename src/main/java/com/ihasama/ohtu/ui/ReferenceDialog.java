@@ -13,6 +13,7 @@ import java.awt.event.ActionEvent;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 
 public class ReferenceDialog extends JDialog {
     
@@ -51,7 +52,7 @@ public class ReferenceDialog extends JDialog {
         for (Map.Entry<FieldType, String> e : ref.getFields().entrySet()) {
             addEmptyField();
             Pair<JComboBox, JTextField> p = fields.get(fields.size() - 1);
-            p.first.setSelectedItem(new TypeItem(p.first));
+            p.first.setSelectedItem(new TypeItem(e.getKey()));
             p.second.setText(e.getValue());
         }
     }
@@ -173,6 +174,25 @@ public class ReferenceDialog extends JDialog {
         @Override
         public String toString() {
             return item.toString().toLowerCase();
+        }
+
+        @Override
+        public boolean equals(Object obj) {
+            if (this == obj)
+                return true;
+            
+            if (obj == null || getClass() != obj.getClass())
+                return false;
+            
+            final TypeItem other = (TypeItem) obj;
+            return Objects.equals(this.item, other.item);
+        }
+
+        @Override
+        public int hashCode() {
+            int hash = 5;
+            hash = 71 * hash + Objects.hashCode(this.item);
+            return hash;
         }
         
     }
