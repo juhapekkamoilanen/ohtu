@@ -6,13 +6,15 @@ import com.ihasama.ohtu.data_access.Dao;
 import com.ihasama.ohtu.domain.EntryType;
 import com.ihasama.ohtu.domain.FieldType;
 import com.ihasama.ohtu.domain.Reference;
+import com.ihasama.ohtu.io.FileIO;
+import com.ihasama.ohtu.io.IO;
 import com.ihasama.ohtu.ui.GUI;
 
 import javax.swing.*;
 import javax.swing.filechooser.FileNameExtensionFilter;
 import java.io.File;
 import java.io.FileNotFoundException;
-import java.io.PrintWriter;
+import java.io.IOException;
 import java.util.Scanner;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -20,26 +22,25 @@ import java.util.regex.Pattern;
 
 public final class FileUtils {
     
-    public static void saveDaoAs(GUI parent, Dao<Reference> dao) {
+    public static void saveDaoAs(GUI parent, Dao<Reference> dao) throws IOException {
         JFileChooser fc = getBibtexFileChooser();
         int ret = fc.showSaveDialog(parent.getFrame());
         if (ret == JFileChooser.APPROVE_OPTION) {
             try {
                 File file = fc.getSelectedFile();
-                writeDaoToFile(file, dao);
+                writeDaoToFile(new FileIO(file), dao);
             } catch (FileNotFoundException ex) {
                 Logger.getLogger(FileUtils.class.getName()).log(Level.SEVERE, null, ex);
             }
         }
     }
     
-    public static void writeDaoToFile(File file, Dao dao) throws FileNotFoundException {            
-        PrintWriter writer = new PrintWriter(file);
+    public static void writeDaoToFile(IO io, Dao dao) throws FileNotFoundException, IOException {
         for (Object obj : dao.getObjects()) {
-            writer.println(obj);
-            writer.println();
+            io.println(obj);
+            io.println();
         }
-        writer.close();
+        io.close();
     }
     
     private static JFileChooser getBibtexFileChooser() {
