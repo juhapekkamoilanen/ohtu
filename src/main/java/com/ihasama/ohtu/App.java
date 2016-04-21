@@ -36,6 +36,7 @@ public class App {
         App application = ctx.getBean(App.class);
         application.runGUI();
         
+        /*
         File f = new File("test.bib");
         System.out.println(f.getAbsolutePath());
         try {
@@ -43,7 +44,7 @@ public class App {
             d.getObjects();
         } catch (InvalidFileException | IOException ex) {
             Logger.getLogger(App.class.getName()).log(Level.SEVERE, null, ex);
-        }
+        }*/
     }
     
     public void runGUI() {
