@@ -1,5 +1,6 @@
 package com.ihasama.ohtu.io;
 
+import java.io.IOException;
 import java.util.ArrayList;
 
 public class StubIO implements IO
@@ -50,11 +51,6 @@ public class StubIO implements IO
     }
 
     @Override
-    public int readInt() {
-        return Integer.parseInt(lines[i++]);
-    }
-
-    @Override
     public String readLine() {
         if (i < lines.length) {
             return lines[i++];
@@ -63,10 +59,15 @@ public class StubIO implements IO
     }
 
     @Override
-    public void flushInput() {
+    public void close() {
     }
 
     @Override
-    public void resetOutput() {
+    public void truncate() {
+        prints.clear();
+    }
+
+    @Override
+    public void flush() throws IOException {
     }
 }

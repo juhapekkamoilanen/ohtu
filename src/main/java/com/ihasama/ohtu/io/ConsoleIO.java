@@ -1,6 +1,7 @@
 
 package com.ihasama.ohtu.io;
 
+import java.io.IOException;
 import org.springframework.context.annotation.Primary;
 import org.springframework.stereotype.Component;
 
@@ -28,23 +29,21 @@ public class ConsoleIO implements IO
     }
 
     @Override
-    public int readInt()
-    {
-        return Integer.parseInt(scanner.nextLine());
-    }
-
-    @Override
     public String readLine()
     {
         return scanner.nextLine();
     }
 
     @Override
-    public void flushInput() {
+    public void close() {
     }
 
     @Override
-    public void resetOutput() {
+    public void truncate() {
+    }
+
+    @Override
+    public void flush() throws IOException {
     }
     
 }

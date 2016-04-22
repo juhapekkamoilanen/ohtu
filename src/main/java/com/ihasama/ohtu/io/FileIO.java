@@ -6,67 +6,115 @@
 
 package com.ihasama.ohtu.io;
 
+import com.sun.istack.internal.Nullable;
 import java.io.BufferedReader;
+import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
+import java.io.FileWriter;
 import java.io.IOException;
-import java.io.PrintWriter;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
 public class FileIO implements IO {
     
-    private final PrintWriter writer;
-    private final BufferedReader reader;
+    private final File file;
+    private BufferedWriter writer;
+    private BufferedReader reader;
+    private boolean hasErrored;
+    private boolean isClosed;
     
     public FileIO(File file) throws FileNotFoundException, IOException {
-        writer = new PrintWriter(file);
+        this.file = file;
+        
+        // FileWriter(file, true): append = true
+        writer = new BufferedWriter(new FileWriter(file, true));
         reader = new BufferedReader(new FileReader(file));
-        reader.mark(0);
     }
 
     @Override
     public void print(Object obj) {
-        writer.print(obj);
+        try {
+            writer.append(obj.toString());
+        } catch (IOException ex) {
+            Logger.getAnonymousLogger().log(Level.SEVERE, null, ex);
+            hasErrored = true;
+        }
     }
 
     @Override
     public void println() {
-        writer.println();
+        try {
+            writer.newLine();
+        } catch (IOException ex) {
+            Logger.getAnonymousLogger().log(Level.SEVERE, null, ex);
+            hasErrored = true;
+        }
     }
 
     @Override
     public void println(Object obj) {
-        writer.println(obj);
+        print(obj.toString());
+        println();
     }
 
-    @Override
-    public int readInt() {
-        try {
-            return Integer.parseInt(reader.readLine());
-        } catch (IOException ex) {
-            return Integer.MIN_VALUE;
-        }
-    }
-
+    @Nullable
     @Override
     public String readLine() {
         try {
             return reader.readLine();
         } catch (IOException ex) {
-            return "";
+            Logger.getAnonymousLogger().log(Level.SEVERE, null, ex);
+            hasErrored = true;
+        }
+        
+        return null;
+    }
+
+    @Override
+    public void close() {
+        isClosed = true;
+        
+        try {
+            writer.close();
+            reader.close();
+        } catch (IOException ex) {
+            Logger.getAnonymousLogger().log(Level.SEVERE, null, ex);
+            hasErrored = true;
         }
     }
 
     @Override
-    public void flushInput() {
-        writer.flush();
+    public void truncate() {
+        try {
+            writer = new BufferedWriter(new FileWriter(file));
+            reader = new BufferedReader(new FileReader(file));
+        } catch (IOException ex) {
+            Logger.getAnonymousLogger().log(Level.SEVERE, null, ex);
+            hasErrored = true;
+        }
     }
 
     @Override
-    public void resetOutput() throws IOException {
-        reader.reset();
+    public void flush() {
+        try {
+            writer.flush();
+        } catch (IOException ex) {
+            Logger.getAnonymousLogger().log(Level.SEVERE, null, ex);
+            hasErrored = true;
+        }
+    }
+    
+    /**
+     * Flushes the stream if it's not closed and checks its error state.
+     * 
+     * @return true if the print stream has encountered an error.
+     */
+    public boolean checkError() {
+        if (!isClosed)
+            flush();
+        return hasErrored;
     }
 
 }

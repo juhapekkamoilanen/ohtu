@@ -54,7 +54,7 @@ public class App {
     public void runConsole() {        
         while (true) {
             io.print("[1] List references [2] Add new reference [3] Quit ");
-            int command = io.readInt();
+            int command = Integer.parseInt(io.readLine());
 
             switch (command) {
                 case 1:

@@ -1,15 +1,14 @@
 
 package com.ihasama.ohtu.io;
 
-import java.io.IOException;
+import java.io.Closeable;
+import java.io.Flushable;
 
-public interface IO
+public interface IO extends Closeable, Flushable
 {
     void print(Object obj);
     void println();
     void println(Object obj);
-    int readInt();
+    void truncate();
     String readLine();
-    void flushInput();
-    void resetOutput() throws IOException;
 }

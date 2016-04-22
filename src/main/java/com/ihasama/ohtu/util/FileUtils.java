@@ -40,7 +40,7 @@ public final class FileUtils {
             io.println(obj);
             io.println();
         }
-        io.flushInput();
+        io.close();
     }
     
     private static JFileChooser getBibtexFileChooser() {

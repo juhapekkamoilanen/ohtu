@@ -20,7 +20,7 @@ import java.util.regex.Pattern;
 
 public class ReferenceIODao extends IODao<Reference> {
     
-    private final String fileData;
+    private String fileData;
 
     public ReferenceIODao(IO io) throws InvalidFileException, IOException {
         super(io);
@@ -28,11 +28,7 @@ public class ReferenceIODao extends IODao<Reference> {
         validateIOData();
     }
     
-    protected String loadIOData() throws FileNotFoundException, IOException {
-        
-        // read from the beginning
-        io.resetOutput();
-        
+    protected String loadIOData() throws FileNotFoundException, IOException {        
         StringBuilder sb = new StringBuilder();
         
         String line;
@@ -102,22 +98,6 @@ public class ReferenceIODao extends IODao<Reference> {
         }
         
         return references;
-    }
-
-    @Override
-    public void add(Reference t) {
-        io.println(t);
-        io.println();
-    }
-
-    @Override
-    public void removeAll() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
-
-    @Override
-    public void remove(Reference t) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
 }

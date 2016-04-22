@@ -40,7 +40,7 @@ public class ConsoleIOTest extends TestCase {
     
     public void testReadInt() {
         io.print("prompt ");
-        assertEquals(123, io.readInt());
+        assertEquals(123, Integer.parseInt(io.readLine()));
         assertEquals("prompt ", out.toString());
     }
     

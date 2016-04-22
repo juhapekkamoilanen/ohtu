@@ -8,6 +8,7 @@ package com.ihasama.ohtu.data_access;
 
 import com.ihasama.ohtu.exception.InvalidFileException;
 import com.ihasama.ohtu.io.IO;
+import java.util.List;
 
 public abstract class IODao<T> implements Dao<T> {
     
@@ -15,6 +16,26 @@ public abstract class IODao<T> implements Dao<T> {
     
     public IODao(IO io) throws InvalidFileException {
         this.io = io;
+    }
+
+    @Override
+    public void add(T t) {
+        io.println(t);
+        io.println();
+    }
+
+    @Override
+    public void removeAll() {
+        io.truncate();
+    }
+
+    @Override
+    public void remove(T t) {
+        List<T> objects = getObjects();
+        objects.remove(t);
+        io.truncate();
+        for (T obj : objects)
+            add(obj);
     }
 
 }
