@@ -8,6 +8,7 @@ package com.ihasama.ohtu.util;
 import com.ihasama.ohtu.data_access.Dao;
 import com.ihasama.ohtu.data_access.ReferenceMemoryDao;
 import com.ihasama.ohtu.io.ConsoleIO;
+import com.ihasama.ohtu.io.FileIO;
 import com.ihasama.ohtu.io.IO;
 import org.junit.After;
 import org.junit.AfterClass;
@@ -46,12 +47,13 @@ public class FileUtilsTest {
     
     @Before
     public void setUp() throws FileNotFoundException {
-        file = new File("test1.bib");
+        file = new File("test2.bib");
         file2 = new File("test.bib");
         dao = new ReferenceMemoryDao();
         io = new ConsoleIO();
         scanner = new Scanner(file);
         f = new FileUtils();
+        
     }
     
     @After
@@ -62,12 +64,16 @@ public class FileUtilsTest {
     public void getRefTest() throws IOException{
         FileUtils.readDaoFromFile(file, dao);
         
-        assertEquals(dao.getObjects().size(), 1);
+        assertEquals(dao.getObjects().size(), 2);
     }
-//    @Test
-//    public void writeDaoTest() throws FileNotFoundException, IOException{
-//        FileUtils.readDaoFromFile(file, dao);
-//        FileUtils.writeDaoToFile(io, dao);
-//        
-//    }
+    @Test
+    public void writeDaoTest() throws FileNotFoundException, IOException{
+        io = new FileIO(file2);
+        FileUtils.readDaoFromFile(file, dao);
+        FileUtils.writeDaoToFile(io, dao);
+        dao = new ReferenceMemoryDao();
+        FileUtils.readDaoFromFile(file2, dao);
+        assertEquals(dao.getObjects().size(), 2);
+    }
+    
 }
