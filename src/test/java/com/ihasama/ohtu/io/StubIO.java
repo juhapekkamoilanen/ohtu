@@ -1,6 +1,7 @@
 package com.ihasama.ohtu.io;
 
 import com.ihasama.ohtu.io.IO;
+import java.io.IOException;
 import java.util.ArrayList;
 
 public class StubIO implements IO
@@ -41,5 +42,10 @@ public class StubIO implements IO
             return lines[i++];
         }
         return "";
+    }
+
+    @Override
+    public void close() throws IOException {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 }

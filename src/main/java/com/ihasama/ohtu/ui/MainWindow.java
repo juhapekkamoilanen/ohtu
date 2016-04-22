@@ -8,6 +8,9 @@ import net.miginfocom.swing.MigLayout;
 
 import javax.swing.*;
 import java.awt.event.ActionEvent;
+import java.io.IOException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 public class MainWindow implements Runnable, GUI {
 
@@ -27,7 +30,11 @@ public class MainWindow implements Runnable, GUI {
         frame = new JFrame(title);
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         
-        addMenu();
+        try{
+            addMenu();
+        } catch (Exception e){
+            //derp
+        }
         addContents((JPanel) frame.getContentPane());
         
         frame.pack();
@@ -48,7 +55,11 @@ public class MainWindow implements Runnable, GUI {
 
         JMenuItem saveAs = new JMenuItem("save as...");
         saveAs.addActionListener(e -> {
-            FileUtils.saveDaoAs(this, dao);
+            try {
+                FileUtils.saveDaoAs(this, dao);
+            } catch (IOException ex) {
+                Logger.getLogger(MainWindow.class.getName()).log(Level.SEVERE, null, ex);
+            }
         });
         
         fileMenu.add(saveAs);

@@ -8,6 +8,7 @@ package com.ihasama.ohtu.io;
 
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.Scanner;
 
@@ -39,6 +40,11 @@ public class FileIO implements IO {
     @Override
     public String readLine(String prompt) {
         return scanner.nextLine();
+    }
+
+    @Override
+    public void close() throws IOException {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
 }
