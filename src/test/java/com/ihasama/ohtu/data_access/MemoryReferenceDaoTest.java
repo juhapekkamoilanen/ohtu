@@ -7,9 +7,10 @@ package com.ihasama.ohtu.data_access;
 
 import com.ihasama.ohtu.domain.EntryType;
 import com.ihasama.ohtu.domain.Reference;
+import junit.framework.TestCase;
+
 import java.util.ArrayList;
 import java.util.List;
-import junit.framework.TestCase;
 
 /**
  *
@@ -55,7 +56,20 @@ public class MemoryReferenceDaoTest extends TestCase {
         dao.add(rf1);
         assertEquals(dao.getObjects().get(0), rf1);
     }
-    
+
+    public void testRemove() {
+        dao.add(rf1);
+        dao.remove(rf1);
+        assertEquals(0, dao.getObjects().size());
+    }
+
+    public void testRemoveAll() {
+        dao.add(rf1);
+        dao.add(rf2);
+        dao.removeAll();
+        assertEquals(0, dao.getObjects().size());
+    }
+
     public void testFindById() {
         dao.add(rf1);
         dao.add(rf2);

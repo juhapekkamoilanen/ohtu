@@ -28,7 +28,10 @@ public class ReferenceList extends JPanel {
         for (Reference ref : dao.getObjects()) {
             JLabel label = new JLabel(ref.getId());
             add(label);
-            add(new JButton(new EditReferenceAction("edit", dao, ref)), "wrap");
+            JPanel panel = new JPanel();
+            panel.add(new JButton(new EditReferenceAction("edit", dao, ref)));
+            panel.add(new JButton(new DeleteReferenceAction("delete", dao, ref)));
+            add(panel, "wrap");
         }
     }
 
@@ -48,7 +51,24 @@ public class ReferenceList extends JPanel {
             new ReferenceDialog("Edit Reference", dao, ref).showDialog();
             refresh();
         }
-        
+    }
+
+    private class DeleteReferenceAction extends AbstractAction {
+
+        private Reference ref;
+        private Dao<Reference> dao;
+
+        public DeleteReferenceAction(String text, Dao<Reference> dao, Reference ref) {
+            super(text);
+            this.dao = dao;
+            this.ref = ref;
+        }
+
+        @Override
+        public void actionPerformed(ActionEvent e) {
+            dao.remove(ref);
+            refresh();
+        }
     }
     
 }

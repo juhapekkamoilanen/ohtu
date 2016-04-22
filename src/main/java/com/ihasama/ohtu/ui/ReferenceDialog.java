@@ -150,7 +150,7 @@ public class ReferenceDialog extends JDialog {
             return ref;
         }
     }
-    
+
     private static class TypeItem {
         
         public static TypeItem[] fromObjects(Object[] objects) {
