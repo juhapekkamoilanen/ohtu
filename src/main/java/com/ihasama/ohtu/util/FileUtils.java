@@ -84,11 +84,11 @@ public final class FileUtils {
         while (scanner.hasNextLine()) {
             line = scanner.nextLine().trim();
 
-            if (Pattern.matches("^@+.*\\{.*,$", line)) {
+            if (Pattern.matches("^@.*(\\{|\\().*,$", line)) {
                 getTypeAndId(line, reference);
             } else if (Pattern.matches("^.*\\s*=\\s*(\\{|\").*(\\}|\"),?$", line)) {
                 getField(line, reference);
-            } else if (Pattern.matches("^\\}$", line)) {
+            } else if (Pattern.matches("^\\}|\\)$", line)) {
                 return reference;
             }
         }
@@ -122,7 +122,7 @@ public final class FileUtils {
         StringBuilder value = new StringBuilder();
         int i = 0;
 
-        for (; line.charAt(i) != ' '; i++) {
+        for (; line.charAt(i) != '='; i++) {
             key.append(line.charAt(i));
         }
 
