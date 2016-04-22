@@ -29,6 +29,10 @@ public class ReferenceIODao extends IODao<Reference> {
     }
     
     protected String loadIOData() throws FileNotFoundException, IOException {
+        
+        // read from the beginning
+        io.resetOutput();
+        
         StringBuilder sb = new StringBuilder();
         
         String line;
@@ -102,7 +106,8 @@ public class ReferenceIODao extends IODao<Reference> {
 
     @Override
     public void add(Reference t) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        io.println(t);
+        io.println();
     }
 
     @Override

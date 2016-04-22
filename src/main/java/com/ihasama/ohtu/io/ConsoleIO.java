@@ -1,7 +1,6 @@
 
 package com.ihasama.ohtu.io;
 
-import java.io.IOException;
 import org.springframework.context.annotation.Primary;
 import org.springframework.stereotype.Component;
 
@@ -41,7 +40,11 @@ public class ConsoleIO implements IO
     }
 
     @Override
-    public void close() throws IOException {
+    public void flushInput() {
+    }
+
+    @Override
+    public void resetOutput() {
     }
     
 }
