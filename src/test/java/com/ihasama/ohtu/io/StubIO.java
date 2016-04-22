@@ -1,7 +1,5 @@
 package com.ihasama.ohtu.io;
 
-import com.ihasama.ohtu.io.IO;
-import java.io.IOException;
 import java.util.ArrayList;
 
 public class StubIO implements IO
@@ -65,6 +63,10 @@ public class StubIO implements IO
     }
 
     @Override
-    public void close() throws IOException {
+    public void flushInput() {
+    }
+
+    @Override
+    public void resetOutput() {
     }
 }

@@ -6,20 +6,24 @@
 
 package com.ihasama.ohtu.io;
 
+import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.io.FileReader;
 import java.io.IOException;
 import java.io.PrintWriter;
-import java.util.Scanner;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 public class FileIO implements IO {
     
     private final PrintWriter writer;
-    private final Scanner scanner;
+    private final BufferedReader reader;
     
-    public FileIO(File file) throws FileNotFoundException {
+    public FileIO(File file) throws FileNotFoundException, IOException {
         writer = new PrintWriter(file);
-        scanner = new Scanner(file);
+        reader = new BufferedReader(new FileReader(file));
+        reader.mark(0);
     }
 
     @Override
@@ -39,17 +43,30 @@ public class FileIO implements IO {
 
     @Override
     public int readInt() {
-        return scanner.nextInt();
+        try {
+            return Integer.parseInt(reader.readLine());
+        } catch (IOException ex) {
+            return Integer.MIN_VALUE;
+        }
     }
 
     @Override
     public String readLine() {
-        return scanner.nextLine();
+        try {
+            return reader.readLine();
+        } catch (IOException ex) {
+            return "";
+        }
     }
 
     @Override
-    public void close() throws IOException {
-        writer.close();
+    public void flushInput() {
+        writer.flush();
+    }
+
+    @Override
+    public void resetOutput() throws IOException {
+        reader.reset();
     }
 
 }
