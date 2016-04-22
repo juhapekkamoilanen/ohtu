@@ -39,7 +39,10 @@ public class ConsoleIO implements IO
 
     @Override
     public void close() throws IOException {
+<<<<<<< HEAD
         //throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+=======
+>>>>>>> master
     }
     
 }
