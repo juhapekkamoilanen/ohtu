@@ -23,7 +23,7 @@ public class ReferenceDialog extends JDialog {
     private JPanel fieldPanel;
     private Dao<Reference> dao;
 
-    private Reference oldRef;
+    private ReferenceListItem oldRef;
     
     public ReferenceDialog(String title, Dao<Reference> dao) {
         this.setTitle(title);
@@ -39,17 +39,17 @@ public class ReferenceDialog extends JDialog {
         fieldPanel = new JPanel(new MigLayout("insets 10, wrap 1", "[grow, fill]"));
     }
     
-    public ReferenceDialog(String title, Dao<Reference> dao, Reference ref) {
+    public ReferenceDialog(String title, Dao<Reference> dao, ReferenceListItem ref) {
         this(title, dao);
         init(ref);
     }
     
-    private void init(Reference ref) {
-        refTypeCombo.setSelectedItem(new TypeItem(ref.getType()));
-        refIdField.setText(ref.getId());
+    private void init(ReferenceListItem ref) {
+        refTypeCombo.setSelectedItem(new TypeItem(ref.getRef().getType()));
+        refIdField.setText(ref.getRef().getId());
         oldRef = ref;
         
-        for (Map.Entry<FieldType, String> e : ref.getFields().entrySet()) {
+        for (Map.Entry<FieldType, String> e : ref.getRef().getFields().entrySet()) {
             addEmptyField();
             Pair<JComboBox, JTextField> p = fields.get(fields.size() - 1);
             p.first.setSelectedItem(new TypeItem(e.getKey()));
@@ -122,9 +122,9 @@ public class ReferenceDialog extends JDialog {
             Reference ref = this.generateReference();
 
             if (oldRef != null) {
-                oldRef.setType(ref.getType());
-                oldRef.setId(ref.getId());
-                oldRef.setFields(ref.getFields());
+                oldRef.getRef().setType(ref.getType());
+                oldRef.getRef().setId(ref.getId());
+                oldRef.getRef().setFields(ref.getFields());
             } else {
                 dao.add(ref);
             }

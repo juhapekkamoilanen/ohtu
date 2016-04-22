@@ -119,5 +119,4 @@ public class ReferenceIODao extends IODao<Reference> {
     public void remove(Reference t) {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
-
 }
