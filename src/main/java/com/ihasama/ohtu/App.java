@@ -1,22 +1,16 @@
 package com.ihasama.ohtu;
 
 import com.ihasama.ohtu.data_access.Dao;
-import com.ihasama.ohtu.data_access.ReferenceFileDao;
 import com.ihasama.ohtu.domain.EntryType;
 import com.ihasama.ohtu.domain.FieldType;
 import com.ihasama.ohtu.domain.Reference;
-import com.ihasama.ohtu.exception.InvalidFileException;
 import com.ihasama.ohtu.io.IO;
 import com.ihasama.ohtu.ui.MainWindow;
-import java.io.File;
-import java.io.IOException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 
 @Component

@@ -1,6 +1,7 @@
 
 package com.ihasama.ohtu.io;
 
+import java.io.IOException;
 import org.springframework.context.annotation.Primary;
 import org.springframework.stereotype.Component;
 
@@ -34,6 +35,10 @@ public class ConsoleIO implements IO
     {
         System.out.print(prompt+" ");
         return scanner.nextLine();
+    }
+
+    @Override
+    public void close() throws IOException {
     }
     
 }

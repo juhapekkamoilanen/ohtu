@@ -13,8 +13,8 @@ scenario "user can open a file", {
         io = new StubIO("2", "article", "id", "title", "A New Article", "", "3")
         app = new App(io, memoryRefDao)
         app.runConsole()
-        File file = new File("test2.bib")
-        FileUtils.writeDaoToFile(file, memoryRefDao)
+        FileIO fio = new FileIO(new File("test2.bib"))
+        FileUtils.writeDaoToFile(fio, memoryRefDao)
         memoryRefDao.removeAll();
     }
 
@@ -41,8 +41,8 @@ given 'file is open', {
 
     when 'file is modified and saved', {
         app.runConsole()
-        File file = new File("test2.bib")
-        FileUtils.writeDaoToFile(file, memoryRefDao)
+        FileIO fio = new FileIO(new File("test2.bib"))
+        FileUtils.writeDaoToFile(fio, memoryRefDao)
     }
 
     then 'file has changed accordingly to modification', {

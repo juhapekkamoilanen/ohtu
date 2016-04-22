@@ -17,8 +17,8 @@ scenario "user can save a new file", {
 
     when 'a valid reference has been added', {
         app.runConsole()
-        File file = new File("test1.bib")
-        FileUtils.writeDaoToFile(file, memoryRefDao)
+        FileIO fio = new FileIO(new File("test1.bib"))
+        FileUtils.writeDaoToFile(fio, memoryRefDao)
     }
 
     then 'a new file is generated', {
