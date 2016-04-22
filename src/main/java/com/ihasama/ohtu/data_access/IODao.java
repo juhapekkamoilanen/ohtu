@@ -7,14 +7,14 @@
 package com.ihasama.ohtu.data_access;
 
 import com.ihasama.ohtu.exception.InvalidFileException;
-import java.io.File;
+import com.ihasama.ohtu.io.IO;
 
-public abstract class FileDao<T> implements Dao<T> {
+public abstract class IODao<T> implements Dao<T> {
     
-    protected final File file;
+    protected final IO io;
     
-    public FileDao(File file) throws InvalidFileException {
-        this.file = file;
+    public IODao(IO io) throws InvalidFileException {
+        this.io = io;
     }
 
 }

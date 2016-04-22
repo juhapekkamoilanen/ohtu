@@ -10,32 +10,29 @@ import com.ihasama.ohtu.domain.EntryType;
 import com.ihasama.ohtu.domain.FieldType;
 import com.ihasama.ohtu.domain.Reference;
 import com.ihasama.ohtu.exception.InvalidFileException;
-import java.io.BufferedReader;
-import java.io.File;
+import com.ihasama.ohtu.io.IO;
 import java.io.FileNotFoundException;
-import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-public class ReferenceFileDao extends FileDao<Reference> {
+public class ReferenceIODao extends IODao<Reference> {
     
     private final String fileData;
 
-    public ReferenceFileDao(File file) throws InvalidFileException, IOException {
-        super(file);
-        fileData = loadFileData();
-        validateFileData();
+    public ReferenceIODao(IO io) throws InvalidFileException, IOException {
+        super(io);
+        fileData = loadIOData();
+        validateIOData();
     }
     
-    protected String loadFileData() throws FileNotFoundException, IOException {
+    protected String loadIOData() throws FileNotFoundException, IOException {
         StringBuilder sb = new StringBuilder();
         
         String line;
-        BufferedReader bf = new BufferedReader(new FileReader(file));
-        while ((line = bf.readLine()) != null)
+        while ((line = io.readLine()) != null)
             sb.append(line);
         
         return sb.toString();
@@ -46,7 +43,7 @@ public class ReferenceFileDao extends FileDao<Reference> {
      * 
      * @throws InvalidFileException 
      */
-    protected void validateFileData() throws InvalidFileException, IOException {
+    protected void validateIOData() throws InvalidFileException, IOException {
         Pattern patt = Pattern.compile("((@.+\\{.+,\\s(\\s*.+\\s?=\\s?\\{.+\\},\\s*)+\\})\\s*)*");        
         Matcher m = patt.matcher(fileData);
         if (!m.matches())

@@ -1,7 +1,7 @@
 package com.ihasama.ohtu;
 
 import com.ihasama.ohtu.data_access.Dao;
-import com.ihasama.ohtu.data_access.ReferenceFileDao;
+import com.ihasama.ohtu.data_access.ReferenceIODao;
 import com.ihasama.ohtu.domain.EntryType;
 import com.ihasama.ohtu.domain.FieldType;
 import com.ihasama.ohtu.domain.Reference;
@@ -53,7 +53,8 @@ public class App {
 
     public void runConsole() {        
         while (true) {
-            int command = io.readInt("[1] List references [2] Add new reference [3] Quit");
+            io.print("[1] List references [2] Add new reference [3] Quit ");
+            int command = io.readInt();
 
             switch (command) {
                 case 1:
@@ -91,7 +92,8 @@ public class App {
 
         while (true) {
             try {
-                entryType = EntryType.valueOf(io.readLine("Reference type:").toUpperCase());
+                io.print("Reference type: ");
+                entryType = EntryType.valueOf(io.readLine().toUpperCase());
                 break;
             } catch (IllegalArgumentException ex) {
 
@@ -100,7 +102,8 @@ public class App {
         }
 
         do {
-            id = io.readLine("Reference id:");
+            io.print("Reference id: ");
+            id = io.readLine();
         } while (id.isEmpty());
 
         Reference ref = new Reference(entryType, id);
@@ -113,7 +116,8 @@ public class App {
 
             while (true) {
                 try {
-                    String str = io.readLine("Field type (empty to save):");
+                    io.print("Field type (empty to save): ");
+                    String str = io.readLine();
                     if (str.isEmpty())
                         break askfields; // jump out of outer loop
 
@@ -126,7 +130,8 @@ public class App {
             }
 
             do {
-                value = io.readLine("Value:");
+                io.print("Value: ");
+                value = io.readLine();
             } while (value.isEmpty());
 
             ref.addField(fieldType, value);

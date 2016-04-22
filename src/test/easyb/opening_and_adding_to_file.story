@@ -14,7 +14,7 @@ scenario "user can open a file", {
         app = new App(io, memoryRefDao)
         app.runConsole()
         File file = new File("test2.bib")
-        FileUtils.writeDaoToFile(file, memoryRefDao)
+        FileUtils.writeDaoToFile(new FileIO(file), memoryRefDao)
         memoryRefDao.removeAll();
     }
 
@@ -42,7 +42,7 @@ given 'file is open', {
     when 'file is modified and saved', {
         app.runConsole()
         File file = new File("test2.bib")
-        FileUtils.writeDaoToFile(file, memoryRefDao)
+        FileUtils.writeDaoToFile(new FileIO(file), memoryRefDao)
     }
 
     then 'file has changed accordingly to modification', {

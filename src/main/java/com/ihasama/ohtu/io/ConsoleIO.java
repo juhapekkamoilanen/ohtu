@@ -1,6 +1,7 @@
 
 package com.ihasama.ohtu.io;
 
+import java.io.IOException;
 import org.springframework.context.annotation.Primary;
 import org.springframework.stereotype.Component;
 
@@ -11,6 +12,11 @@ import java.util.Scanner;
 public class ConsoleIO implements IO
 {
     private Scanner scanner = new Scanner(System.in);
+
+    @Override
+    public void print(Object obj) {
+        System.out.print(obj);
+    }
     
     @Override
     public void println() {
@@ -23,17 +29,19 @@ public class ConsoleIO implements IO
     }
 
     @Override
-    public int readInt(String prompt)
+    public int readInt()
     {
-        System.out.print(prompt+" ");
         return Integer.parseInt(scanner.nextLine());
     }
 
     @Override
-    public String readLine(String prompt)
+    public String readLine()
     {
-        System.out.print(prompt+" ");
         return scanner.nextLine();
+    }
+
+    @Override
+    public void close() throws IOException {
     }
     
 }
