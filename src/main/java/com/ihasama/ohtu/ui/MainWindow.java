@@ -8,6 +8,8 @@ import net.miginfocom.swing.MigLayout;
 
 import javax.swing.*;
 import java.awt.event.ActionEvent;
+import java.awt.event.KeyAdapter;
+import java.awt.event.KeyEvent;
 import java.io.IOException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -69,8 +71,31 @@ public class MainWindow implements Runnable, GUI {
         container.setLayout(new MigLayout("wrap 1", "[grow]"));
         JButton addBtn = new JButton(new AddReferenceAction("New Reference", dao));
         list = new ReferenceList(dao);
+        JPanel searchPanel = new JPanel();
+        JLabel searchLabel = new JLabel("Filter: ");
+        JTextField searchField = new JTextField(20);
+        searchPanel.add(searchLabel);
+        searchPanel.add(searchField);
+
+        searchField.addKeyListener(new KeyAdapter() {
+            private int fieldLength = 0;
+
+            public void keyReleased(KeyEvent e) {
+                if (fieldLength > searchField.getText().length()) {
+                    list.refresh();
+                }
+
+                list.filter(searchField.getText());
+            }
+
+            public void keyPressed(KeyEvent e) {
+                fieldLength = searchField.getText().length();
+            }
+        });
+
         container.add(addBtn, "grow, gap 10 10 10 10");
         container.add(new JSeparator(), "grow");
+        container.add(searchPanel);
         container.add(list, "grow, gap 10 10 10 10");
     }
 
@@ -109,7 +134,5 @@ public class MainWindow implements Runnable, GUI {
             list.refresh();
             refresh();
         }
-        
     }
-
 }

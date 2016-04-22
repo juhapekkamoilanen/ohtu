@@ -6,7 +6,10 @@ import com.ihasama.ohtu.domain.Reference;
 import net.miginfocom.swing.MigLayout;
 
 import javax.swing.*;
+import java.awt.*;
 import java.awt.event.ActionEvent;
+import java.util.Arrays;
+import java.util.List;
 
 public class ReferenceList extends JPanel {
     
@@ -23,24 +26,23 @@ public class ReferenceList extends JPanel {
         addContents();
         revalidate();
     }
-    
+
     private void addContents() {
         for (Reference ref : dao.getObjects()) {
-            JLabel label = new JLabel(ref.getId());
-            add(label);
-            JPanel panel = new JPanel();
-            panel.add(new JButton(new EditReferenceAction("edit", dao, ref)));
-            panel.add(new JButton(new DeleteReferenceAction("delete", dao, ref)));
-            add(panel, "wrap");
+            ReferenceListItem item = new ReferenceListItem(ref);
+            item.add(new JLabel(item.toString()), "wrap");
+            item.add(new JButton(new EditReferenceAction("edit", dao, item)));
+            item.add(new JButton(new DeleteReferenceAction("delete", dao, item)));
+            add(item, "wrap");
         }
     }
 
     private class EditReferenceAction extends AbstractAction {
         
-        private Reference ref;
+        private ReferenceListItem ref;
         private Dao<Reference> dao;
         
-        public EditReferenceAction(String text, Dao<Reference> dao, Reference ref) {
+        public EditReferenceAction(String text, Dao<Reference> dao, ReferenceListItem ref) {
             super(text);
             this.dao = dao;
             this.ref = ref;
@@ -55,10 +57,10 @@ public class ReferenceList extends JPanel {
 
     private class DeleteReferenceAction extends AbstractAction {
 
-        private Reference ref;
+        private ReferenceListItem ref;
         private Dao<Reference> dao;
 
-        public DeleteReferenceAction(String text, Dao<Reference> dao, Reference ref) {
+        public DeleteReferenceAction(String text, Dao<Reference> dao, ReferenceListItem ref) {
             super(text);
             this.dao = dao;
             this.ref = ref;
@@ -66,9 +68,32 @@ public class ReferenceList extends JPanel {
 
         @Override
         public void actionPerformed(ActionEvent e) {
-            dao.remove(ref);
+            dao.remove(ref.getRef());
             refresh();
         }
     }
-    
+
+    public void filter(String filter) {
+        List<Component> components = Arrays.asList(this.getComponents());
+
+        for (Component c : components) {
+            ReferenceListItem ref = (ReferenceListItem) c;
+
+            for (String value : ref.getRef().getFields().values()) {
+                if (!value.contains(filter)) {
+                    if (ref.getParent() != null) {
+                        this.remove(ref);
+                        revalidate();
+                        break;
+                    }
+                } else if (value.contains(filter)) {
+                    if (ref.getParent() == null) {
+                        this.add(ref);
+                        revalidate();
+                        break;
+                    }
+                }
+            }
+        }
+    }
 }
