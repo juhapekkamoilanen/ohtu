@@ -69,17 +69,4 @@ public class MemoryReferenceDaoTest extends TestCase {
         dao.removeAll();
         assertEquals(0, dao.getObjects().size());
     }
-
-    public void testFindById() {
-        dao.add(rf1);
-        dao.add(rf2);
-        
-        assertEquals(rf2, dao.findById("1"));
-    }
-    
-    public void testNotFindById() {
-        dao.add(rf1);
-        dao.add(rf2);
-        assertEquals(null, dao.findById("3"));
-    }
 }

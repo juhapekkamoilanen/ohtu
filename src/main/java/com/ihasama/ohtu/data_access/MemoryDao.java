@@ -18,6 +18,11 @@ public class MemoryDao<T> implements Dao<T>
     }
 
     @Override
+    public List<T> getObjects(String filter) {
+        return new ArrayList<>(objects);
+    }
+
+    @Override
     public void add(T obj)
     {
         objects.add(obj);

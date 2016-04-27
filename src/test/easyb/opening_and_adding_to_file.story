@@ -28,29 +28,3 @@ scenario "user can open a file", {
         io.getPrints().shouldHave("@article{id,\ntitle = {A New Article},\n")
     }
 }
-
-scenario "user can modify opened file", {
-given 'file is open', {
-        memoryRefDao = new ReferenceMemoryDao()
-        memoryRefDao.removeAll();
-        io = new StubIO("2", "article", "id2", "title", "A New Article2", "", "3")
-        app = new App(io, memoryRefDao)
-        File file = new File("test2.bib")
-        FileUtils.readDaoFromFile(file, memoryRefDao)
-    }
-
-    when 'file is modified and saved', {
-        app.runConsole()
-        File file = new File("test2.bib")
-        FileUtils.writeDaoToFile(new FileIO(file), memoryRefDao)
-    }
-
-    then 'file has changed accordingly to modification', {
-        Scanner scanner = new Scanner(new File("test2.bib"))
-        reference = new StringBuilder()
-        while (scanner.hasNextLine()) {
-            reference.append(scanner.nextLine())
-        }
-        reference.toString().shouldBe("@article{id,title = {A New Article},}@article{id2,title = {A New Article2},}")
-    }
-}

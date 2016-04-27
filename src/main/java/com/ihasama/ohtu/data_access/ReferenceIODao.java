@@ -101,6 +101,11 @@ public class ReferenceIODao extends IODao<Reference> {
     }
 
     @Override
+    public List<Reference> getObjects(String filter) {
+        return null;
+    }
+
+    @Override
     public void add(Reference t) {
         io.println(t);
         io.println();

@@ -3,6 +3,7 @@
 package com.ihasama.ohtu.util;
 
 import com.ihasama.ohtu.data_access.Dao;
+import com.ihasama.ohtu.data_access.ReferenceMemoryDao;
 import com.ihasama.ohtu.domain.EntryType;
 import com.ihasama.ohtu.domain.FieldType;
 import com.ihasama.ohtu.domain.Reference;
@@ -51,27 +52,29 @@ public final class FileUtils {
         return fc;
     }
 
-    public static void loadDaoFrom(GUI parent, Dao<Reference> dao) {
+    public static Dao<Reference> loadDaoFrom(GUI parent) {
         JFileChooser fc = getBibtexFileChooser();
         int ret = fc.showOpenDialog(parent.getFrame());
         if (ret == JFileChooser.APPROVE_OPTION) {
             try {
                 File file = fc.getSelectedFile();
-                readDaoFromFile(file, dao);
-            } catch (FileNotFoundException ex) {
+                return readDaoFromFile(file);
+            } catch (IOException ex) {
                 Logger.getLogger(FileUtils.class.getName()).log(Level.SEVERE, null, ex);
             }
         }
+
+        return null;
     }
 
-    public static void readDaoFromFile(File file, Dao<Reference> dao) throws FileNotFoundException {
+    public static Dao<Reference> readDaoFromFile(File file) throws FileNotFoundException {
         Scanner scanner = new Scanner(file);
-        dao.removeAll();
+        Dao<Reference> dao = new ReferenceMemoryDao();
 
         while (true) {
             Reference reference = getReference(scanner);
 
-            if (reference == null) { return; }
+            if (reference == null) { return dao; }
 
             dao.add(reference);
         }
