@@ -20,7 +20,7 @@ public class ReferenceMemoryDao extends MemoryDao<Reference> {
         for (Reference ref : objects) {
             if (ref.getId().contains(filter)) {
                 filteredObjects.add(ref);
-                break;
+                continue;
             }
 
             for (String value : ref.getFields().values()) {
