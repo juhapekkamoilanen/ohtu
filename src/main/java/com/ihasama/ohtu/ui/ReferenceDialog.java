@@ -11,9 +11,11 @@ import net.miginfocom.swing.MigLayout;
 import javax.swing.*;
 import java.awt.event.ActionEvent;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
+import java.util.stream.Collectors;
 
 public class ReferenceDialog extends JDialog {
     
@@ -120,6 +122,27 @@ public class ReferenceDialog extends JDialog {
         @Override
         public void actionPerformed(ActionEvent e) {
             Reference ref = this.generateReference();
+            if (ref.getId().isEmpty()) {
+                JOptionPane.showMessageDialog(ReferenceDialog.this,
+                    "Missing ID.",
+                    "error",
+                    JOptionPane.ERROR_MESSAGE);
+                return;
+            }
+            
+            List<FieldType> fieldTypeList = Arrays.asList(ref.getType().getRequiredFieldTypes());
+            List<String> required = fieldTypeList.stream()
+                    .filter(field -> !ref.getFields().containsKey(field) || ref.getFields().get(field).isEmpty())
+                    .map(field -> field.toString().toLowerCase())
+                    .collect(Collectors.toList());
+            if (!required.isEmpty()) {
+                String reqStr = String.join(", ", required);
+                JOptionPane.showMessageDialog(ReferenceDialog.this,
+                    "Missing required fields: " + reqStr,
+                    "error",
+                    JOptionPane.ERROR_MESSAGE);
+                return;
+            }
 
             if (oldRef != null) {
                 oldRef.getRef().setType(ref.getType());
