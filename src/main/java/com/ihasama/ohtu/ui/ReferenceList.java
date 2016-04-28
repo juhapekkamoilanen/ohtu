@@ -28,7 +28,6 @@ public class ReferenceList extends JPanel {
     private void addContents() {
         for (Reference ref : dao.getObjects(filter)) {
             ReferenceListItem item = new ReferenceListItem(ref);
-            item.add(new JLabel(item.toString()), "wrap");
 
             JButton editBtn = new JButton("Edit");
             editBtn.addActionListener(e -> {

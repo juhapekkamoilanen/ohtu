@@ -15,6 +15,7 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 public class ReferenceDialog extends JDialog {
@@ -59,6 +60,23 @@ public class ReferenceDialog extends JDialog {
         }
     }
     
+    private List<FieldType> getMissingRequiredFields(Reference ref) {
+        return Arrays.asList(ref.getType().getRequiredFieldTypes()).stream()
+                .filter(field -> !ref.getFields().containsKey(field) || ref.getFields().get(field).isEmpty())
+                .collect(Collectors.toList());
+    }
+    
+    private List<FieldType> getMissingRequiredFields() {
+        EntryType selected = (EntryType) ((TypeItem) refTypeCombo.getSelectedItem()).item;
+        List<FieldType> required = Arrays.asList(selected.getRequiredFieldTypes());
+        List<FieldType> existing = fields.stream()
+                .map(pair -> pair.first)
+                .map(combo -> (FieldType) ((TypeItem) combo.getSelectedItem()).item)
+                .collect(Collectors.toList());
+        
+        return required.stream().filter(ft -> !existing.contains(ft)).collect(Collectors.toList());
+    }
+    
     public void showDialog() {
         addContents();
         pack();
@@ -66,7 +84,13 @@ public class ReferenceDialog extends JDialog {
         setVisible(true);
     }
     
-    private void addContents() {
+    private void addContents() {        
+        for (FieldType ft : getMissingRequiredFields()) {
+            addEmptyField();
+            Pair<JComboBox, JTextField> p = fields.get(fields.size() - 1);
+            p.first.setSelectedItem(new TypeItem(ft));
+        }
+        
         JPanel refDataPanel = new JPanel(new MigLayout("insets 10, wrap 2", "[]8[grow, fill]"));
         refDataPanel.add(new JLabel("Type"));
         refDataPanel.add(refTypeCombo, "grow");
@@ -130,11 +154,10 @@ public class ReferenceDialog extends JDialog {
                 return;
             }
             
-            List<FieldType> fieldTypeList = Arrays.asList(ref.getType().getRequiredFieldTypes());
-            List<String> required = fieldTypeList.stream()
-                    .filter(field -> !ref.getFields().containsKey(field) || ref.getFields().get(field).isEmpty())
+            List<String> required = getMissingRequiredFields(ref).stream()
                     .map(field -> field.toString().toLowerCase())
                     .collect(Collectors.toList());
+            
             if (!required.isEmpty()) {
                 String reqStr = String.join(", ", required);
                 JOptionPane.showMessageDialog(ReferenceDialog.this,
