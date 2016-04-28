@@ -143,26 +143,7 @@
                 <version>2.7</version>
                 <configuration>
                   <format>xml</format>
-                  <instrumentation>
-                    <ignores>
-                      <ignore>com.ihasama.ohtu.ui.*</ignore>
-                      <ignore>com.ihasama.ohtu.data_access.FileDao</ignore>
-                      <ignore>com.ihasama.ohtu.data_access.ReferenceFileDao</ignore>
-                    </ignores>
-                    <excludes>
-                      <exclude>com/ihasama/ohtu/ui/*.class</exclude>
-                      <exclude>com/ihasama/ohtu/data_access/FileDao.class</exclude>
-                      <exclude>com/ihasama/ohtu/data_access/ReferenceFileDao.class</exclude>
-                    </excludes>
-                  </instrumentation>
                 </configuration>
-                <executions>
-                  <execution>
-                    <goals>
-                      <goal>instrument</goal>
-                    </goals>
-                  </execution>
-                </executions>
             </plugin>
             
             <plugin>
