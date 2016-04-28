@@ -6,32 +6,32 @@ import java.util.regex.Pattern;
 
 public class StringUtils {
 
-    private static Map<String, String> conversionsFromBibToNormal = new HashMap<String, String>(){
+    private static Map<String, Character> conversionsFromBibToNormal = new HashMap<String, Character>(){
         {
-            put("(\\{\\\\\"a\\})|(\\\\\"\\{a\\})", "ä");
-            put("(\\{\\\\\"A\\})|(\\\\\"\\{A\\})", "Ä");
-            put("(\\{\\\\\"o\\})|(\\\\\"\\{o\\})", "ö");
-            put("(\\{\\\\\"O\\})|(\\\\\"\\{O\\})", "Ö");
-            put("(\\{\\\\\"aa\\})|(\\\\\"\\{aa\\})", "å");
-            put("(\\{\\\\\"AA\\})|(\\\\\"\\{AA\\})", "Å");
+            put("(\\{\\\\\"a\\})|(\\\\\"\\{a\\})", 'ä');
+            put("(\\{\\\\\"A\\})|(\\\\\"\\{A\\})", 'Ä');
+            put("(\\{\\\\\"o\\})|(\\\\\"\\{o\\})", 'ö');
+            put("(\\{\\\\\"O\\})|(\\\\\"\\{O\\})", 'Ö');
+            put("(\\{\\\\\"aa\\})|(\\\\\"\\{aa\\})", 'å');
+            put("(\\{\\\\\"AA\\})|(\\\\\"\\{AA\\})", 'Å');
         }
     };
 
-    private static Map<String, String> conversionsFromNormalToBib = new HashMap<String, String>(){
+    private static Map<Character, String> conversionsFromNormalToBib = new HashMap<Character, String>(){
         {
-            put("ä", "{\\\"a}");
-            put("Ä", "{\\\"A}");
-            put("ö", "{\\\"o}");
-            put("Ö", "{\\\"O}");
-            put("å", "{\\\"aa}");
-            put("Å", "{\\\"AA}");
+            put('ä', "{\\\"a}");
+            put('Ä', "{\\\"A}");
+            put('ö', "{\\\"o}");
+            put('Ö', "{\\\"O}");
+            put('å', "{\\\"aa}");
+            put('Å', "{\\\"AA}");
         }
     };
 
     public static String toBibFormat(String string) {
         StringBuilder newString = new StringBuilder();
 
-        for (int i = 0; i< string.length(); i++) {
+        for (int i = 0; i < string.length(); i++) {
             char c = string.charAt(i);
 
             if (conversionsFromNormalToBib.containsKey(c)) {
@@ -57,7 +57,7 @@ public class StringUtils {
                     stringToMatch.append(string.charAt(i));
 
                     if (string.charAt(i) == '}') {
-                        String match = findMatch(stringToMatch);
+                        Character match = findMatch(stringToMatch);
 
                         if (match != null) {
                             newString.append(match);
@@ -73,7 +73,7 @@ public class StringUtils {
         return newString.toString();
     }
 
-    private static String findMatch(StringBuilder stringToMatch) {
+    private static Character findMatch(StringBuilder stringToMatch) {
         for (String key : conversionsFromBibToNormal.keySet()) {
             if (Pattern.matches(key, stringToMatch.toString())) {
                 return conversionsFromBibToNormal.get(key);
