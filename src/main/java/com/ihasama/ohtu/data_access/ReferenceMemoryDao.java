@@ -4,8 +4,8 @@ package com.ihasama.ohtu.data_access;
 import com.ihasama.ohtu.domain.Reference;
 import org.springframework.stereotype.Component;
 
-import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Component
 public class ReferenceMemoryDao extends MemoryDao<Reference> {
@@ -15,22 +15,8 @@ public class ReferenceMemoryDao extends MemoryDao<Reference> {
             return objects;
         }
 
-        List<Reference> filteredObjects = new ArrayList<>();
-
-        for (Reference ref : objects) {
-            if (ref.getId().contains(filter)) {
-                filteredObjects.add(ref);
-                continue;
-            }
-
-            for (String value : ref.getFields().values()) {
-                if (value.contains(filter)) {
-                    filteredObjects.add(ref);
-                    break;
-                }
-            }
-        }
-
-        return filteredObjects;
+        return objects.stream().filter(ref->ref.getId().toLowerCase().contains(filter) ||
+                ref.getFields().values().stream().anyMatch(v->v.toLowerCase().contains(filter)))
+                .collect(Collectors.toList());
     }
 }

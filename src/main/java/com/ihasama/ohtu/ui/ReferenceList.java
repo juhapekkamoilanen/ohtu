@@ -23,6 +23,7 @@ public class ReferenceList extends JPanel {
         removeAll();
         addContents();
         revalidate();
+        repaint();
     }
 
     private void addContents() {
@@ -49,6 +50,7 @@ public class ReferenceList extends JPanel {
 
     public void setDao(Dao<Reference> dao) {
         this.dao = dao;
+        refresh();
     }
 
     public void setFilter(String filter) {
