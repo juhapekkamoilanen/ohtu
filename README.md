@@ -1,4 +1,4 @@
-# ohtu [![Build Status](https://travis-ci.org/tilastokeskus/ohtu.svg?branch=master)](https://travis-ci.org/tilastokeskus/ohtu)
+# ohtu [![Build Status](https://travis-ci.org/tilastokeskus/ohtu.svg?branch=dev)](https://travis-ci.org/tilastokeskus/ohtu) [![Coverage Status](https://coveralls.io/repos/github/tilastokeskus/ohtu/badge.svg?branch=dev)](https://coveralls.io/github/tilastokeskus/ohtu?branch=dev)
 
 Ohjelmistotuotanto-kurssin miniprojektiryhmän repositorio.
 
