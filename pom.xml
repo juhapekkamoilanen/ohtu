@@ -145,13 +145,23 @@
                   <instrumentation>
                     <ignores>
                       <ignore>com.ihasama.ohtu.ui.*</ignore>
+                      <ignore>com.ihasama.ohtu.App</ignore>
                       <ignore>com.ihasama.ohtu.data_access.FileDao</ignore>
+                      <ignore>com.ihasama.ohtu.data_access.IODao</ignore>
                       <ignore>com.ihasama.ohtu.data_access.ReferenceFileDao</ignore>
+                      <ignore>com.ihasama.ohtu.data_access.ReferenceIODao</ignore>
+                      <ignore>com.ihasama.ohtu.util.FileUtils</ignore>
+                      <ignore>com.ihasama.ohtu.io.FileIO</ignore>
                     </ignores>
                     <excludes>
                       <exclude>com/ihasama/ohtu/ui/*.class</exclude>
+                      <exclude>com/ihasama/ohtu/App.class</exclude>
                       <exclude>com/ihasama/ohtu/data_access/FileDao.class</exclude>
+                      <exclude>com/ihasama/ohtu/data_access/IODao.class</exclude>
                       <exclude>com/ihasama/ohtu/data_access/ReferenceFileDao.class</exclude>
+                      <exclude>com/ihasama/ohtu/data_access/ReferenceIODao.class</exclude>
+                      <exclude>com/ihasama/ohtu/util/FileUtils.class</exclude>
+                      <exclude>com/ihasama/ohtu/io/FileIO.class</exclude>
                     </excludes>
                   </instrumentation>
                 </configuration>

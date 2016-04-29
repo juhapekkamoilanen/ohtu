@@ -69,4 +69,10 @@ public class MemoryReferenceDaoTest extends TestCase {
         dao.removeAll();
         assertEquals(0, dao.getObjects().size());
     }
+    
+        public void testGetWithFilter(){
+        dao.add(rf1);
+        dao.add(rf2);
+        assertEquals(dao.getObjects("0").size(),1 );
+    }
 }
