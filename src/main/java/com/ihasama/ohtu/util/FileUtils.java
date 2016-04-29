@@ -117,7 +117,7 @@ public final class FileUtils {
             id.append(line.charAt(i));
         }
 
-        reference.setId(id.toString().trim());
+        reference.setId(StringUtils.toNormalFormat(id.toString().trim()));
     }
 
     private static void getField(String line, Reference reference) {

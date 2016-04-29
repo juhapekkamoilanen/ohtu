@@ -8,17 +8,13 @@ import com.ihasama.ohtu.util.FileUtils;
 import net.miginfocom.swing.MigLayout;
 
 import javax.swing.*;
-<<<<<<< HEAD
-import java.awt.event.ActionEvent;
-import java.io.IOException;
-=======
+
 import java.awt.*;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
->>>>>>> dev
 import java.util.logging.Level;
 import java.util.logging.Logger;
 

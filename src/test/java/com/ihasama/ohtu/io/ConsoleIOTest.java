@@ -8,6 +8,7 @@ package com.ihasama.ohtu.io;
 
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
+import java.io.IOException;
 import java.io.PrintStream;
 import junit.framework.TestCase;
 
@@ -44,10 +45,13 @@ public class ConsoleIOTest extends TestCase {
         assertEquals("prompt ", out.toString());
     }
     
-    public void testReadLine() {
+    public void testReadLine() throws IOException {
         io.print("prompt ");
         assertEquals("123", io.readLine());
         assertEquals("prompt ", out.toString());
+        io.close();
+        io.truncate();
+        io.flush();
     }
     
 }

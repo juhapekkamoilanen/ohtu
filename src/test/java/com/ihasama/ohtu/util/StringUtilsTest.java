@@ -17,9 +17,10 @@ import static org.junit.Assert.*;
  * @author max
  */
 public class StringUtilsTest {
-    
-    StringUtils su;
-    
+
+    StringUtils utils;
+    Pair pair;
+
     public StringUtilsTest() {
     }
     
@@ -30,18 +31,25 @@ public class StringUtilsTest {
     @AfterClass
     public static void tearDownClass() {
     }
-    
-    @Before
-    public void setUp() {
-        su = new StringUtils();
-    }
-    
-    @After
-    public void tearDown() {
-    }
 
-    //@Test
-    //public void toBibTestA(){
-    //    assertEquals(StringUtils.toBibFormat("ä"), "\"{\\\"a}\"");
-    //}
+    @Test
+    public void testNormalFormat(){
+        assertEquals("@article", StringUtils.toNormalFormat("@article{id,\n" +
+"title = {A New Article},\n" +
+"}"));
+        assertEquals("@inproceedings", StringUtils.toNormalFormat("@inproceedings{VPL11,\n" +
+"author = {Vihavainen, Arto and Paksula, Matti and Luukkainen, Matti},\n" +
+"title = {Extreme Apprenticeship Method in Teaching Programming for Beginners.},\n" +
+"year = {2011},\n" +
+"booktitle = {SIGCSE '11: Proceedings of the 42nd SIGCSE technical symposium on Computer science education},\n" +
+"}"));
+    }
+    
+    @Test
+    public void pairTest(){
+        
+        pair = new Pair(String.class, 1);
+        assertEquals(pair.first, String.class);
+        assertEquals(pair.second, 1);
+    }
 }

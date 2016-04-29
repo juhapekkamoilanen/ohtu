@@ -108,12 +108,4 @@ public class FileIO implements IO {
             flush();
         return hasErrored;
     }
-
-    @Override
-    public void close() throws IOException {
-
-        writer.close();
-
-    }
-
 }
