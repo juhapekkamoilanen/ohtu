@@ -1,10 +1,10 @@
 
 package com.ihasama.ohtu.io;
 
-import java.io.IOException;
 import org.springframework.context.annotation.Primary;
 import org.springframework.stereotype.Component;
 
+import java.io.IOException;
 import java.util.Scanner;
 
 @Primary
@@ -45,5 +45,4 @@ public class ConsoleIO implements IO
     @Override
     public void flush() throws IOException {
     }
-    
 }

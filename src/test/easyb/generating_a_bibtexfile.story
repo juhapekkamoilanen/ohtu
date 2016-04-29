@@ -17,18 +17,20 @@ scenario "user can save a new file", {
 
     when 'a valid reference has been added', {
         app.runConsole()
-        File file = new File("test1.bib")
-        file.delete();
-        file = new File("test1.bib")
+        File file = new File("test.bib")
+        file.delete()
+        file = new File("test.bib")
         FileUtils.writeDaoToFile(new FileIO(file), memoryRefDao)
     }
 
     then 'a new file is generated', {
-        Scanner scanner = new Scanner(new File("test1.bib"))
+        File file = new File("test.bib")
+        Scanner scanner = new Scanner(file)
         reference = new StringBuilder()
         while (scanner.hasNextLine()) {
             reference.append(scanner.nextLine())
         }
         reference.toString().shouldBe("@article{id,title = {A New Article},}")
+        file.delete();
     }
 }
