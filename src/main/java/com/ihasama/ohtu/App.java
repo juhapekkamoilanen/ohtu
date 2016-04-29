@@ -8,13 +8,14 @@ import com.ihasama.ohtu.io.IO;
 import com.ihasama.ohtu.ui.MainWindow;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
+import org.springframework.context.support.ClassPathXmlApplicationContext;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
-import org.springframework.context.support.ClassPathXmlApplicationContext;
 
 @Component
 public class App {
+
     private IO io;
     private Dao<Reference> dao;
 
@@ -24,30 +25,31 @@ public class App {
         this.dao = dao;
     }
 
-    public static void main( String[] args ) {
+    public static void main(String[] args) {
         ApplicationContext ctx = new ClassPathXmlApplicationContext("com/ihasama/ohtu/spring-context.xml");
 
         App application = ctx.getBean(App.class);
         application.runGUI();
-        
+
         /*
-        File f = new File("test.bib");
-        System.out.println(f.getAbsolutePath());
-        try {
-            ReferenceFileDao d = new ReferenceFileDao(f);
-            d.getObjects();
-        } catch (InvalidFileException | IOException ex) {
-            Logger.getLogger(App.class.getName()).log(Level.SEVERE, null, ex);
-        }*/
+         File f = new File("test.bib");
+         System.out.println(f.getAbsolutePath());
+         try {
+         ReferenceFileDao d = new ReferenceFileDao(f);
+         d.getObjects();
+         } catch (InvalidFileException | IOException ex) {
+         Logger.getLogger(App.class.getName()).log(Level.SEVERE, null, ex);
+         }*/
     }
-    
+
     public void runGUI() {
         new MainWindow("BibTeX gen", dao).show();
     }
 
-    public void runConsole() {        
+    public void runConsole() {
         while (true) {
-            int command = io.readInt("[1] List references [2] Add new reference [3] Quit");
+            io.print("[1] List references [2] Add new reference [3] Quit [4] Remove reference [5] Filter references");
+            int command = Integer.parseInt(io.readLine());
 
             switch (command) {
                 case 1:
@@ -58,6 +60,12 @@ public class App {
                     break;
                 case 3:
                     return;
+                case 4:
+                    handleRemove();
+                    break;
+                case 5:
+                    handleFilter();
+                    break;
                 default:
             }
         }
@@ -85,7 +93,8 @@ public class App {
 
         while (true) {
             try {
-                entryType = EntryType.valueOf(io.readLine("Reference type:").toUpperCase());
+                io.print("Reference type: ");
+                entryType = EntryType.valueOf(io.readLine().toUpperCase());
                 break;
             } catch (IllegalArgumentException ex) {
 
@@ -94,7 +103,8 @@ public class App {
         }
 
         do {
-            id = io.readLine("Reference id:");
+            io.print("Reference id: ");
+            id = io.readLine();
         } while (id.isEmpty());
 
         Reference ref = new Reference(entryType, id);
@@ -107,10 +117,11 @@ public class App {
 
             while (true) {
                 try {
-                    String str = io.readLine("Field type (empty to save):");
-                    if (str.isEmpty())
+                    io.print("Field type (empty to save): ");
+                    String str = io.readLine();
+                    if (str.isEmpty()) {
                         break askfields; // jump out of outer loop
-
+                    }
                     fieldType = FieldType.valueOf(str.toUpperCase());
                     break;
                 } catch (IllegalArgumentException ex) {
@@ -120,7 +131,8 @@ public class App {
             }
 
             do {
-                value = io.readLine("Value:");
+                io.print("Value: ");
+                value = io.readLine();
             } while (value.isEmpty());
 
             ref.addField(fieldType, value);
@@ -131,5 +143,43 @@ public class App {
         dao.add(ref);
         io.println("\nReference added successfully.\n");
         io.println(ref + "\n");
+    }
+
+    public void handleRemove() {
+        String id;
+
+        io.print("Give reference id to remove: ");
+
+        do {
+            id = io.readLine();
+        } while (id.isEmpty());
+
+        if (dao.getObjects(id).isEmpty()) {
+            io.println("Reference of that id doesn't exist");
+        } else {
+            for (Reference ref : dao.getObjects(id)) {
+                if (ref.getId().equals(id)) {
+                    dao.remove(ref);
+                }
+            }
+        }
+    }
+
+    public void handleFilter() {
+        String keyword;
+
+        io.print("Give keyword for filtering: ");
+
+        do {
+            keyword = io.readLine();
+        } while (keyword.isEmpty());
+
+        if (dao.getObjects(keyword).isEmpty()) {
+            io.println("References containing keyword do not exist\n");
+        } else {
+            for (Reference ref : dao.getObjects(keyword)) {
+                io.println(ref + "\n");
+            }
+        }
     }
 }

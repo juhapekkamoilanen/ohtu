@@ -13,8 +13,10 @@ scenario "user can open a file", {
         io = new StubIO("2", "article", "id", "title", "A New Article", "", "3")
         app = new App(io, memoryRefDao)
         app.runConsole()
-        FileIO fio = new FileIO(new File("test2.bib"))
-        FileUtils.writeDaoToFile(fio, memoryRefDao)
+        File file = new File("test2.bib")
+        file.delete()
+        file = new File("test2.bib")
+        FileUtils.writeDaoToFile(new FileIO(file), memoryRefDao)
         memoryRefDao.removeAll();
     }
 
@@ -26,6 +28,7 @@ scenario "user can open a file", {
 
     then 'file is open', {
         io.getPrints().shouldHave("@article{id,\ntitle = {A New Article},\n")
+        
     }
 }
 
@@ -36,13 +39,19 @@ given 'file is open', {
         io = new StubIO("2", "article", "id2", "title", "A New Article2", "", "3")
         app = new App(io, memoryRefDao)
         File file = new File("test2.bib")
-        FileUtils.readDaoFromFile(file, memoryRefDao)
+        FileUtils.readDaoFromFile(file)
     }
 
     when 'file is modified and saved', {
         app.runConsole()
+<<<<<<< HEAD
         FileIO fio = new FileIO(new File("test2.bib"))
         FileUtils.writeDaoToFile(fio, memoryRefDao)
+=======
+        File file = new File("test2.bib")
+        FileUtils.writeDaoToFile(new FileIO(file), memoryRefDao)
+        
+>>>>>>> dev
     }
 
     then 'file has changed accordingly to modification', {

@@ -13,6 +13,7 @@ public enum FieldType {
     BOOKTITLE,
     CHAPTER,
     CROSSREF,
+    EDITOR,
     EDITION,
     HOWPUBLISHED,
     INSTITUTION,

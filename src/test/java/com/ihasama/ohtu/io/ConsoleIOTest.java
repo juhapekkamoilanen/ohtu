@@ -9,7 +9,6 @@ package com.ihasama.ohtu.io;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.PrintStream;
-import java.util.Scanner;
 import junit.framework.TestCase;
 
 public class ConsoleIOTest extends TestCase {
@@ -40,12 +39,14 @@ public class ConsoleIOTest extends TestCase {
     }
     
     public void testReadInt() {
-        assertEquals(123, io.readInt("prompt"));
+        io.print("prompt ");
+        assertEquals(123, Integer.parseInt(io.readLine()));
         assertEquals("prompt ", out.toString());
     }
     
     public void testReadLine() {
-        assertEquals("123", io.readLine("prompt"));
+        io.print("prompt ");
+        assertEquals("123", io.readLine());
         assertEquals("prompt ", out.toString());
     }
     

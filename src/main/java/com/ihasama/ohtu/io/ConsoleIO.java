@@ -12,6 +12,11 @@ import java.util.Scanner;
 public class ConsoleIO implements IO
 {
     private Scanner scanner = new Scanner(System.in);
+
+    @Override
+    public void print(Object obj) {
+        System.out.print(obj);
+    }
     
     @Override
     public void println() {
@@ -24,17 +29,21 @@ public class ConsoleIO implements IO
     }
 
     @Override
-    public int readInt(String prompt)
+    public String readLine()
     {
-        System.out.print(prompt+" ");
-        return Integer.parseInt(scanner.nextLine());
+        return scanner.nextLine();
     }
 
     @Override
-    public String readLine(String prompt)
-    {
-        System.out.print(prompt+" ");
-        return scanner.nextLine();
+    public void close() {
+    }
+
+    @Override
+    public void truncate() {
+    }
+
+    @Override
+    public void flush() throws IOException {
     }
 
     @Override

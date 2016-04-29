@@ -11,9 +11,12 @@ import net.miginfocom.swing.MigLayout;
 import javax.swing.*;
 import java.awt.event.ActionEvent;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 public class ReferenceDialog extends JDialog {
     
@@ -23,7 +26,7 @@ public class ReferenceDialog extends JDialog {
     private JPanel fieldPanel;
     private Dao<Reference> dao;
 
-    private Reference oldRef;
+    private ReferenceListItem oldRef;
     
     public ReferenceDialog(String title, Dao<Reference> dao) {
         this.setTitle(title);
@@ -39,22 +42,39 @@ public class ReferenceDialog extends JDialog {
         fieldPanel = new JPanel(new MigLayout("insets 10, wrap 1", "[grow, fill]"));
     }
     
-    public ReferenceDialog(String title, Dao<Reference> dao, Reference ref) {
+    public ReferenceDialog(String title, Dao<Reference> dao, ReferenceListItem ref) {
         this(title, dao);
         init(ref);
     }
     
-    private void init(Reference ref) {
-        refTypeCombo.setSelectedItem(new TypeItem(ref.getType()));
-        refIdField.setText(ref.getId());
+    private void init(ReferenceListItem ref) {
+        refTypeCombo.setSelectedItem(new TypeItem(ref.getRef().getType()));
+        refIdField.setText(ref.getRef().getId());
         oldRef = ref;
         
-        for (Map.Entry<FieldType, String> e : ref.getFields().entrySet()) {
+        for (Map.Entry<FieldType, String> e : ref.getRef().getFields().entrySet()) {
             addEmptyField();
             Pair<JComboBox, JTextField> p = fields.get(fields.size() - 1);
             p.first.setSelectedItem(new TypeItem(e.getKey()));
             p.second.setText(e.getValue());
         }
+    }
+    
+    private List<FieldType> getMissingRequiredFields(Reference ref) {
+        return Arrays.asList(ref.getType().getRequiredFieldTypes()).stream()
+                .filter(field -> !ref.getFields().containsKey(field) || ref.getFields().get(field).isEmpty())
+                .collect(Collectors.toList());
+    }
+    
+    private List<FieldType> getMissingRequiredFields() {
+        EntryType selected = (EntryType) ((TypeItem) refTypeCombo.getSelectedItem()).item;
+        List<FieldType> required = Arrays.asList(selected.getRequiredFieldTypes());
+        List<FieldType> existing = fields.stream()
+                .map(pair -> pair.first)
+                .map(combo -> (FieldType) ((TypeItem) combo.getSelectedItem()).item)
+                .collect(Collectors.toList());
+        
+        return required.stream().filter(ft -> !existing.contains(ft)).collect(Collectors.toList());
     }
     
     public void showDialog() {
@@ -64,7 +84,13 @@ public class ReferenceDialog extends JDialog {
         setVisible(true);
     }
     
-    private void addContents() {
+    private void addContents() {        
+        for (FieldType ft : getMissingRequiredFields()) {
+            addEmptyField();
+            Pair<JComboBox, JTextField> p = fields.get(fields.size() - 1);
+            p.first.setSelectedItem(new TypeItem(ft));
+        }
+        
         JPanel refDataPanel = new JPanel(new MigLayout("insets 10, wrap 2", "[]8[grow, fill]"));
         refDataPanel.add(new JLabel("Type"));
         refDataPanel.add(refTypeCombo, "grow");
@@ -120,11 +146,31 @@ public class ReferenceDialog extends JDialog {
         @Override
         public void actionPerformed(ActionEvent e) {
             Reference ref = this.generateReference();
+            if (ref.getId().isEmpty()) {
+                JOptionPane.showMessageDialog(ReferenceDialog.this,
+                    "Missing ID.",
+                    "error",
+                    JOptionPane.ERROR_MESSAGE);
+                return;
+            }
+            
+            List<String> required = getMissingRequiredFields(ref).stream()
+                    .map(field -> field.toString().toLowerCase())
+                    .collect(Collectors.toList());
+            
+            if (!required.isEmpty()) {
+                String reqStr = String.join(", ", required);
+                JOptionPane.showMessageDialog(ReferenceDialog.this,
+                    "Missing required fields: " + reqStr,
+                    "error",
+                    JOptionPane.ERROR_MESSAGE);
+                return;
+            }
 
             if (oldRef != null) {
-                oldRef.setType(ref.getType());
-                oldRef.setId(ref.getId());
-                oldRef.setFields(ref.getFields());
+                oldRef.getRef().setType(ref.getType());
+                oldRef.getRef().setId(ref.getId());
+                oldRef.getRef().setFields(ref.getFields());
             } else {
                 dao.add(ref);
             }
@@ -150,7 +196,7 @@ public class ReferenceDialog extends JDialog {
             return ref;
         }
     }
-    
+
     private static class TypeItem {
         
         public static TypeItem[] fromObjects(Object[] objects) {

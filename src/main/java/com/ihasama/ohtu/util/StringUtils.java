@@ -1,21 +1,43 @@
 package com.ihasama.ohtu.util;
 
+import java.util.HashMap;
+import java.util.Map;
+import java.util.regex.Pattern;
+
 public class StringUtils {
+
+    private static Map<String, Character> conversionsFromBibToNormal = new HashMap<String, Character>(){
+        {
+            put("(\\{\\\\\"a\\})|(\\\\\"\\{a\\})", 'ä');
+            put("(\\{\\\\\"A\\})|(\\\\\"\\{A\\})", 'Ä');
+            put("(\\{\\\\\"o\\})|(\\\\\"\\{o\\})", 'ö');
+            put("(\\{\\\\\"O\\})|(\\\\\"\\{O\\})", 'Ö');
+            put("(\\{\\\\\"aa\\})|(\\\\\"\\{aa\\})", 'å');
+            put("(\\{\\\\\"AA\\})|(\\\\\"\\{AA\\})", 'Å');
+        }
+    };
+
+    private static Map<Character, String> conversionsFromNormalToBib = new HashMap<Character, String>(){
+        {
+            put('ä', "{\\\"a}");
+            put('Ä', "{\\\"A}");
+            put('ö', "{\\\"o}");
+            put('Ö', "{\\\"O}");
+            put('å', "{\\\"aa}");
+            put('Å', "{\\\"AA}");
+        }
+    };
 
     public static String toBibFormat(String string) {
         StringBuilder newString = new StringBuilder();
 
-        for (int i = 0; i< string.length(); i++) {
+        for (int i = 0; i < string.length(); i++) {
             char c = string.charAt(i);
 
-            switch (c) {
-                case 'ä': newString.append("{\\\"a}"); break;
-                case 'ö': newString.append("{\\\"o}"); break;
-                case 'Ä': newString.append("{\\\"A}"); break;
-                case 'Ö': newString.append("{\\\"O}"); break;
-                case 'Å': newString.append("{\\\"AA}"); break;
-                case 'å': newString.append("{\\\"aa}"); break;
-                default: newString.append(c);
+            if (conversionsFromNormalToBib.containsKey(c)) {
+                newString.append(conversionsFromNormalToBib.get(c));
+            } else {
+                newString.append(c);
             }
         }
 
@@ -23,12 +45,41 @@ public class StringUtils {
     }
 
     public static String toNormalFormat(String string) {
-        return string
-                .replace("{\\\"a}", "ä")
-                .replace("{\\\"A}", "Ä")
-                .replace("{\\\"o}", "ö")
-                .replace("{\\\"O}", "Ö")
-                .replace("{\\\"AA}", "Å")
-                .replace("{\\\"aa}", "å");
+        StringBuilder newString = new StringBuilder();
+
+        for (int i = 0; i < string.length(); i++) {
+            char c = string.charAt(i);
+
+            if (c == '{' || c == '\\') {
+                StringBuilder stringToMatch = new StringBuilder();
+
+                for (; i < string.length(); i++) {
+                    stringToMatch.append(string.charAt(i));
+
+                    if (string.charAt(i) == '}') {
+                        Character match = findMatch(stringToMatch);
+
+                        if (match != null) {
+                            newString.append(match);
+                            break;
+                        }
+                    }
+                }
+            } else {
+                newString.append(c);
+            }
+        }
+
+        return newString.toString();
+    }
+
+    private static Character findMatch(StringBuilder stringToMatch) {
+        for (String key : conversionsFromBibToNormal.keySet()) {
+            if (Pattern.matches(key, stringToMatch.toString())) {
+                return conversionsFromBibToNormal.get(key);
+            }
+        }
+
+        return null;
     }
 }

@@ -31,11 +31,11 @@ public enum EntryType {
     ),
     INCOLLECTION(
             new FieldType[]{FieldType.AUTHOR, FieldType.TITLE, FieldType.BOOKTITLE, FieldType.PUBLISHER, FieldType.YEAR},
-            new FieldType[]{FieldType.VOLUME, FieldType.SERIES, FieldType.TYPE, FieldType.CHAPTER, FieldType.PAGES, FieldType.ADDRESS, FieldType.EDITION, FieldType.MONTH, FieldType.NOTE, FieldType.KEY}
+            new FieldType[]{FieldType.VOLUME, FieldType.SERIES, FieldType.EDITOR, FieldType.TYPE, FieldType.CHAPTER, FieldType.PAGES, FieldType.ADDRESS, FieldType.EDITION, FieldType.MONTH, FieldType.NOTE, FieldType.KEY}
     ),
     INPROCEEDINGS(
             new FieldType[]{FieldType.AUTHOR, FieldType.TITLE, FieldType.BOOKTITLE, FieldType.YEAR},
-            new FieldType[]{FieldType.VOLUME, FieldType.SERIES, FieldType.PAGES, FieldType.ADDRESS, FieldType.MONTH, FieldType.ORGANIZATION, FieldType.PUBLISHER, FieldType.NOTE, FieldType.KEY}
+            new FieldType[]{FieldType.VOLUME, FieldType.SERIES, FieldType.PAGES, FieldType.ADDRESS, FieldType.MONTH, FieldType.EDITOR, FieldType.ORGANIZATION, FieldType.PUBLISHER, FieldType.NOTE, FieldType.KEY}
     ),
     MANUAL(
             new FieldType[]{FieldType.TITLE},
@@ -55,7 +55,7 @@ public enum EntryType {
     ),
     PROCEEDINGS(
             new FieldType[]{FieldType.TITLE, FieldType.YEAR},
-            new FieldType[]{FieldType.VOLUME, FieldType.SERIES, FieldType.ADDRESS, FieldType.MONTH, FieldType.PUBLISHER, FieldType.ORGANIZATION, FieldType.NOTE, FieldType.KEY}
+            new FieldType[]{FieldType.VOLUME, FieldType.SERIES, FieldType.ADDRESS, FieldType.MONTH, FieldType.PUBLISHER, FieldType.EDITOR, FieldType.ORGANIZATION, FieldType.NOTE, FieldType.KEY}
     ),
     TECHREPORT(
             new FieldType[]{FieldType.AUTHOR, FieldType.TITLE, FieldType.INSTITUTION, FieldType.YEAR},

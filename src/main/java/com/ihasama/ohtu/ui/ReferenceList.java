@@ -6,15 +6,16 @@ import com.ihasama.ohtu.domain.Reference;
 import net.miginfocom.swing.MigLayout;
 
 import javax.swing.*;
-import java.awt.event.ActionEvent;
 
 public class ReferenceList extends JPanel {
-    
+
     private Dao<Reference> dao;
-    
+    private String filter;
+
     public ReferenceList(Dao<Reference> dao) {
         super(new MigLayout("insets 0", "[grow]"));
         this.dao = dao;
+        this.filter = null;
         addContents();
     }
     
@@ -22,33 +23,38 @@ public class ReferenceList extends JPanel {
         removeAll();
         addContents();
         revalidate();
+        repaint();
     }
-    
+
     private void addContents() {
-        for (Reference ref : dao.getObjects()) {
-            JLabel label = new JLabel(ref.getId());
-            add(label);
-            add(new JButton(new EditReferenceAction("edit", dao, ref)), "wrap");
+        for (Reference ref : dao.getObjects(filter)) {
+            ReferenceListItem item = new ReferenceListItem(ref);
+
+            JButton editBtn = new JButton("Edit");
+            editBtn.addActionListener(e -> {
+                new ReferenceDialog("Edit Reference", dao, item).showDialog();
+                refresh();
+            });
+            item.add(editBtn);
+
+            JButton deleteBtn = new JButton("Delete");
+            deleteBtn.addActionListener(e -> {
+                dao.remove(ref);
+                refresh();
+            });
+            item.add(deleteBtn);
+
+            add(item, "wrap");
         }
     }
 
-    private class EditReferenceAction extends AbstractAction {
-        
-        private Reference ref;
-        private Dao<Reference> dao;
-        
-        public EditReferenceAction(String text, Dao<Reference> dao, Reference ref) {
-            super(text);
-            this.dao = dao;
-            this.ref = ref;
-        }
-        
-        @Override
-        public void actionPerformed(ActionEvent e) {
-            new ReferenceDialog("Edit Reference", dao, ref).showDialog();
-            refresh();
-        }
-        
+    public void setDao(Dao<Reference> dao) {
+        this.dao = dao;
+        refresh();
     }
-    
+
+    public void setFilter(String filter) {
+        this.filter = filter;
+        refresh();
+    }
 }
