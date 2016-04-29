@@ -8,7 +8,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 @Component
-public class git ReferenceMemoryDao extends MemoryDao<Reference> {
+public class ReferenceMemoryDao extends MemoryDao<Reference> {
 
     public List<Reference> getObjects(String filter) {
         if (filter == null || filter.isEmpty()) {
