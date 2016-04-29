@@ -8,7 +8,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 @Component
-public class ReferenceMemoryDao extends MemoryDao<Reference> {
+public class git ReferenceMemoryDao extends MemoryDao<Reference> {
 
     public List<Reference> getObjects(String filter) {
         if (filter == null || filter.isEmpty()) {
@@ -16,7 +16,8 @@ public class ReferenceMemoryDao extends MemoryDao<Reference> {
         }
 
         return objects.stream().filter(ref->ref.getId().toLowerCase().contains(filter) ||
-                ref.getFields().values().stream().anyMatch(v->v.toLowerCase().contains(filter)))
+                ref.getFields().values().stream().anyMatch(v->v.toLowerCase().contains(filter)) ||
+                ref.getTags().stream().anyMatch(t->t.toLowerCase().contains(filter)))
                 .collect(Collectors.toList());
     }
 }

@@ -16,7 +16,7 @@ public class ReferenceListItem extends JPanel {
     private JCheckBox checkBox;
 
     public ReferenceListItem(Reference ref) {
-        super(new MigLayout("wrap 2", "[grow]"));
+        super(new MigLayout("wrap 1", "[grow]"));
         this.ref = ref;
         this.checkBox = new JCheckBox();
         addContents();
@@ -27,17 +27,36 @@ public class ReferenceListItem extends JPanel {
     }
 
     private void addContents() {
-        add(new JLabel(ref.getId()));
-        add(checkBox, "span");
+        JPanel firstPanel = new JPanel();
+        firstPanel.add(new JLabel(ref.getId()));
+        firstPanel.add(checkBox, "span");
+        add(firstPanel);
 
         for (Map.Entry<FieldType, String> e : ref.getFields().entrySet()) {
+            JPanel panel = new JPanel();
             JLabel label = new JLabel(e.getKey().toString().toLowerCase() + ":");
             JLabel value = new JLabel(e.getValue());
             label.setFont(fieldFont);
             value.setFont(fieldFont);
-            add(label);
-            add(value);
+            panel.add(label);
+            panel.add(value);
+            add(panel);
         }
+
+        JPanel tagPanel = new JPanel();
+
+        JLabel label = new JLabel("tags: ");
+        label.setFont(fieldFont);
+        tagPanel.add(label);
+
+        for (String tag : ref.getTags()) {
+            JLabel tagLabel = new JLabel("#" + tag + " ");
+            tagLabel.setFont(fieldFont);
+            tagPanel.add(tagLabel);
+        }
+
+        add(tagPanel);
+
     }
 
     public String toString() {

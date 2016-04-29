@@ -18,7 +18,7 @@ public class ReferenceList extends JPanel {
         this.filter = null;
         addContents();
     }
-    
+
     public void refresh() {
         removeAll();
         addContents();
@@ -29,20 +29,22 @@ public class ReferenceList extends JPanel {
     private void addContents() {
         for (Reference ref : dao.getObjects(filter)) {
             ReferenceListItem item = new ReferenceListItem(ref);
+            JPanel buttonPanel = new JPanel();
 
             JButton editBtn = new JButton("Edit");
             editBtn.addActionListener(e -> {
                 new ReferenceDialog("Edit Reference", dao, item).showDialog();
                 refresh();
             });
-            item.add(editBtn);
+            buttonPanel.add(editBtn);
 
             JButton deleteBtn = new JButton("Delete");
             deleteBtn.addActionListener(e -> {
                 dao.remove(ref);
                 refresh();
             });
-            item.add(deleteBtn);
+            buttonPanel.add(deleteBtn);
+            item.add(buttonPanel);
 
             add(item, "wrap");
         }

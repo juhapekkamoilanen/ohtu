@@ -9,12 +9,15 @@ package com.ihasama.ohtu.domain;
 import com.ihasama.ohtu.util.StringUtils;
 
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Map;
+import java.util.Set;
 
 public class Reference {
     private EntryType entryType;
     private String id;
     private Map<FieldType, String> fields;
+    private Set<String> tags;
 
     public Reference() {
         this.fields = new HashMap<>();
@@ -22,6 +25,7 @@ public class Reference {
 
     public Reference(EntryType type, String id) {
         this.fields = new HashMap<>();
+        this.tags = new HashSet<>();
         this.entryType = type;
         this.id = id;
     }
@@ -41,7 +45,29 @@ public class Reference {
         fields.put(type, value);
         return true;
     }
-    
+
+    public boolean addTag(String tag) {
+        tags.add(tag);
+        return true;
+    }
+
+    public boolean removeTag(String tag) {
+        tags.remove(tag);
+        return true;
+    }
+
+    public Set<String> getTags() {
+        if (tags == null) {
+            tags = new HashSet<>();
+        }
+
+        return tags;
+    }
+
+    public void setTags(Set<String> tags) {
+        this.tags = tags;
+    }
+
     @Override
     public String toString() {
         StringBuilder sb = new StringBuilder();

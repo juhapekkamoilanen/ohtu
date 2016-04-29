@@ -10,12 +10,7 @@ import net.miginfocom.swing.MigLayout;
 
 import javax.swing.*;
 import java.awt.event.ActionEvent;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Map;
-import java.util.Objects;
-import java.util.Set;
+import java.util.*;
 import java.util.stream.Collectors;
 
 public class ReferenceDialog extends JDialog {
@@ -23,6 +18,7 @@ public class ReferenceDialog extends JDialog {
     private JComboBox refTypeCombo;
     private JTextField refIdField;
     private List<Pair<JComboBox, JTextField>> fields;
+    private TagList tagList;
     private JPanel fieldPanel;
     private Dao<Reference> dao;
 
@@ -40,6 +36,7 @@ public class ReferenceDialog extends JDialog {
         
         fields = new ArrayList<>();
         fieldPanel = new JPanel(new MigLayout("insets 10, wrap 1", "[grow, fill]"));
+        tagList = new TagList();
     }
     
     public ReferenceDialog(String title, Dao<Reference> dao, ReferenceListItem ref) {
@@ -50,6 +47,7 @@ public class ReferenceDialog extends JDialog {
     private void init(ReferenceListItem ref) {
         refTypeCombo.setSelectedItem(new TypeItem(ref.getRef().getType()));
         refIdField.setText(ref.getRef().getId());
+        tagList.setTags(ref.getRef().getTags());
         oldRef = ref;
         
         for (Map.Entry<FieldType, String> e : ref.getRef().getFields().entrySet()) {
@@ -96,6 +94,36 @@ public class ReferenceDialog extends JDialog {
         refDataPanel.add(refTypeCombo, "grow");
         refDataPanel.add(new JLabel("ID"));
         refDataPanel.add(refIdField, "grow");
+
+        JPanel tagPanel = new JPanel(new MigLayout("insets 5, wrap 3", "[]8[grow, fill]"));
+        tagPanel.add(new JLabel("Tag"));
+
+        JTextField tagField = new JTextField(10);
+        tagField.addActionListener(e -> {
+            if (!tagField.getText().isEmpty()) {
+                tagList.getTags().add(tagField.getText().trim());
+                tagField.setText("");
+                tagList.refresh();
+                this.revalidate();
+                this.pack();
+            }
+        });
+
+        tagPanel.add(tagField);
+
+        JButton tagAddBtn = new JButton("Add");
+        tagAddBtn.addActionListener(e -> {
+            if (!tagField.getText().isEmpty()) {
+                tagList.getTags().add(tagField.getText().trim());
+                tagField.setText("");
+                tagList.refresh();
+                this.revalidate();
+                this.pack();
+            }
+        });
+
+        tagPanel.add(tagAddBtn);
+        tagPanel.add(tagList, "grow");
         
         JPanel buttonPanel = new JPanel(new MigLayout("insets 10"));        
         buttonPanel.add(new JButton(new AddFieldAction("Add field")));
@@ -104,6 +132,8 @@ public class ReferenceDialog extends JDialog {
         add(refDataPanel, "grow");
         add(new JSeparator(), "grow");
         add(fieldPanel, "grow");
+        add(new JSeparator(), "grow");
+        add(tagPanel, "grow");
         add(new JSeparator(), "grow");
         add(buttonPanel, "grow");
         
@@ -171,6 +201,7 @@ public class ReferenceDialog extends JDialog {
                 oldRef.getRef().setType(ref.getType());
                 oldRef.getRef().setId(ref.getId());
                 oldRef.getRef().setFields(ref.getFields());
+                oldRef.getRef().setTags(ref.getTags());
             } else {
                 dao.add(ref);
             }
@@ -192,6 +223,8 @@ public class ReferenceDialog extends JDialog {
                         pair.second.getText()
                 );
             }
+
+            tagList.getTags().stream().forEach(t->ref.addTag(t));
 
             return ref;
         }
