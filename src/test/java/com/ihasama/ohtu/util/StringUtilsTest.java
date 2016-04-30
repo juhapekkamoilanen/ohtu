@@ -17,9 +17,10 @@ import static org.junit.Assert.*;
  * @author max
  */
 public class StringUtilsTest {
-    
+
     StringUtils utils;
     Pair pair;
+
     public StringUtilsTest() {
     }
     
@@ -29,14 +30,6 @@ public class StringUtilsTest {
     
     @AfterClass
     public static void tearDownClass() {
-    }
-    
-    @Before
-    public void setUp() {
-    }
-    
-    @After
-    public void tearDown() {
     }
 
     @Test

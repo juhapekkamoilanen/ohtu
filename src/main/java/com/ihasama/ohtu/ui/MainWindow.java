@@ -8,6 +8,7 @@ import com.ihasama.ohtu.util.FileUtils;
 import net.miginfocom.swing.MigLayout;
 
 import javax.swing.*;
+
 import java.awt.*;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
@@ -35,7 +36,11 @@ public class MainWindow implements Runnable, GUI {
         frame = new JFrame(title);
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         
-        addMenu();
+        try{
+            addMenu();
+        } catch (Exception e){
+            //derp
+        }
         addContents((JPanel) frame.getContentPane());
         
         frame.pack();
