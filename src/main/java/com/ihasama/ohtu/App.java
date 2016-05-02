@@ -91,28 +91,23 @@ public class App {
         EntryType entryType;
         String id;
 
-        while (true) {
-            try {
-                io.print("Reference type: ");
-                entryType = EntryType.valueOf(io.readLine().toUpperCase());
-                break;
-            } catch (IllegalArgumentException ex) {
+        entryType = readEntryType();
 
-                io.println("Illegal reference type.");
-            }
-        }
-
-        do {
-            io.print("Reference id: ");
-            id = io.readLine();
-        } while (id.isEmpty());
+        id = readUserInput("Reference id: ");
 
         Reference ref = new Reference(entryType, id);
 
+        ref = askFields(ref);
+        
+        dao.add(ref);
+        io.println("\nReference added successfully.\n");
+        io.println(ref + "\n");
+    }
+    
+    private Reference askFields(Reference ref) {
         FieldType fieldType;
         String value;
-
-        askfields: // label loop to jump out of it
+        
         while (true) {
 
             while (true) {
@@ -120,7 +115,7 @@ public class App {
                     io.print("Field type (empty to save): ");
                     String str = io.readLine();
                     if (str.isEmpty()) {
-                        break askfields; // jump out of outer loop
+                        return ref;
                     }
                     fieldType = FieldType.valueOf(str.toUpperCase());
                     break;
@@ -130,29 +125,18 @@ public class App {
                 }
             }
 
-            do {
-                io.print("Value: ");
-                value = io.readLine();
-            } while (value.isEmpty());
-
+            value = readUserInput("Value: ");
             ref.addField(fieldType, value);
-
             io.println("Field added.\n");
         }
-
-        dao.add(ref);
-        io.println("\nReference added successfully.\n");
-        io.println(ref + "\n");
-    }
+    } 
 
     public void handleRemove() {
         String id;
 
         io.print("Give reference id to remove: ");
 
-        do {
-            id = io.readLine();
-        } while (id.isEmpty());
+        id = readUserInput("");
 
         if (dao.getObjects(id).isEmpty()) {
             io.println("Reference of that id doesn't exist");
@@ -170,9 +154,7 @@ public class App {
 
         io.print("Give keyword for filtering: ");
 
-        do {
-            keyword = io.readLine();
-        } while (keyword.isEmpty());
+        keyword = readUserInput("");
 
         if (dao.getObjects(keyword).isEmpty()) {
             io.println("References containing keyword do not exist\n");
@@ -181,5 +163,37 @@ public class App {
                 io.println(ref + "\n");
             }
         }
+    }
+    
+    private String readUserInput(String message) {
+        String input;
+        
+        do {
+            showMessage(message);
+            input = io.readLine();
+        } while (input.isEmpty());
+        
+        return input;
+    }
+    
+    private void showMessage(String message) {
+        if (!message.equals("")) {
+            io.print(message);
+        }
+    }
+    
+    private EntryType readEntryType() {
+        EntryType entryType;
+        while (true) {
+            try {
+                io.print("Reference type: ");
+                entryType = EntryType.valueOf(readUserInput("").toUpperCase());
+                break;
+            } catch (IllegalArgumentException ex) {
+
+                io.println("Illegal reference type.");
+            }
+        }
+        return entryType;
     }
 }
